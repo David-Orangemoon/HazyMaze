@@ -3,5 +3,5 @@ Math.randomRange = (min, max) => {
 }
 
 Math.randomIRange = (min, max) => {
-    return Math.floor(Math.randomRange(min, max));
+    return Math.round(Math.randomRange(min, max));
 }

@@ -6,10 +6,20 @@
     <title>Hazy Maze</title>
 </head>
 <body>
+    <canvas id="generationDebug" width="640" height="480"></canvas>
     <script>window.HazyMaze={};</script>
     <script src="src/daveShade3.js"></script>
     <script src="src/helper.js"></script>
     <script src="src/level.js"></script>
     <script src="src/mazeGen.js"></script>
+    <style>
+        canvas {
+            top: 0px;
+            position: absolute;
+            margin: 0px;
+            height: 100%;
+            aspect-ratio: 640/480;
+        }
+    </style>
 </body>
 </html>

@@ -33,10 +33,12 @@ HazyMaze.level = {
         let returned = 0;
 
         //Check directions and augment accordingly
-        if (HazyMaze.level.getTile(x+1, y) & HazyMaze.WEST) returned |= HazyMaze.EAST;
-        if (HazyMaze.level.getTile(x-1, y) & HazyMaze.EAST) returned |= HazyMaze.WEST;
-        if (HazyMaze.level.getTile(x, y+1) & HazyMaze.SOUTH) returned |= HazyMaze.NORTH;
-        if (HazyMaze.level.getTile(x, y-1) & HazyMaze.NORTH) returned |= HazyMaze.SOUTH;
+        if (HazyMaze.level.getTile(x+1, y) >= 0) {
+            if (HazyMaze.level.getTile(x+1, y) & HazyMaze.WEST) returned |= HazyMaze.EAST;
+            if (HazyMaze.level.getTile(x-1, y) & HazyMaze.EAST) returned |= HazyMaze.WEST;
+            if (HazyMaze.level.getTile(x, y+1) & HazyMaze.SOUTH) returned |= HazyMaze.NORTH;
+            if (HazyMaze.level.getTile(x, y-1) & HazyMaze.NORTH) returned |= HazyMaze.SOUTH;
+        }
 
         return returned;
     },
