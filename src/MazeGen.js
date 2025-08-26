@@ -1,8 +1,10 @@
-(function() {
-    HazyMaze.level = {
-        createEmpty: (width, height) => { HazyMaze.level.tiles = Int8Array(width*height) },
-        tiles:Int8Array(1)
-    };
+HazyMaze.generate = () => {
+    const mazyPosition = new Int8Array(2);
 
-    createEmpty(16,16);
-})();
+    mazyPosition[0] = Math.randomIRange(0, HazyMaze.level.width - 1);
+    mazyPosition[1] = Math.randomIRange(0, HazyMaze.level.height - 1);
+
+    HazyMaze.level.setTile(...mazyPosition, HazyMaze.level.getTile(...mazyPosition) ^ HazyMaze.WEST);
+
+    return mazyPosition;
+};
