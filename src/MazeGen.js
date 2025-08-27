@@ -6,10 +6,8 @@ HazyMaze.generate = () => {
 
     const worm = () => {
         const oldPos = new Uint16Array(mazyPosition);
-        console.log(`Generating from ${oldPos}`);
 
         let paths = HazyMaze.level.getPathsFrom(...mazyPosition);
-        console.log(paths);
         while (paths != 0) {
             const possible = [];
 

@@ -322,8 +322,8 @@ window.DaveShade = {};
             GL.enable(GL.BLEND);
             GL.blendEquation(GL[daveShadeInstance.blendFunc[0]]);
             GL.blendFunc(GL[daveShadeInstance.blendFunc[1]], GL[daveShadeInstance.blendFunc[2]]);
-            GL.pixelStorei(GL.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         }
+        GL.pixelStorei(GL.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 
         //*When we need to split the shader into 2 parts due to it being in a single file. good for keeping storage sizes down
         daveShadeInstance.decomposeShader = (shaderCode) => {
@@ -570,6 +570,7 @@ window.DaveShade = {};
                 //* The setter
                 shader.attributes[attributeDef.name].set = (newValue) => {
                     if (daveShadeInstance.oldAttributes[location] == newValue.bufferID) return;
+                    console.log(`set ${attributeDef.name}`);
                     daveShadeInstance.oldAttributes[location] = newValue.bufferID;
                     GL.bindBuffer(GL.ARRAY_BUFFER, newValue);
                     GL.vertexAttribPointer(location, divisions, GL.FLOAT, false, 0, 0);
