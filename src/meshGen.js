@@ -10,9 +10,9 @@
         HazyMaze.meshPoints = 0;
 
         json.a_position.push(
-            0, 0, 0, 1,
-            1, 0, 0, 1,
-            0, 1, 0, 1,
+            -1, -1, 0.5, 1,
+            1, -1, 0.5, 1,
+            -1, 1, 0.5, 1,
         );
         HazyMaze.meshPoints = 3;
 
