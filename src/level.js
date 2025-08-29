@@ -11,6 +11,7 @@ HazyMaze.level = {
         HazyMaze.level.height = height;
         HazyMaze.level.tiles = new Uint8Array(width*height);
         for (let i in HazyMaze.level.tiles) { HazyMaze.level.tiles[i] = 255 }
+        HazyMaze.entities = [];
         return HazyMaze.level.tiles;
     },
     //Tile modification
@@ -43,6 +44,7 @@ HazyMaze.level = {
     //Level data
     width:1,
     height:1,
+    entities: [],
     tiles:new Uint8Array(1)
 };
 

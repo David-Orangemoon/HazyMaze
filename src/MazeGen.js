@@ -1,4 +1,8 @@
 HazyMaze.genMaze = () => {
+    //Clear entities before generation
+    HazyMaze.entities = [];
+
+    //Create mazy the maze generator;
     const mazyPosition = new Uint16Array(2);
 
     mazyPosition[0] = Math.randomIRange(0, HazyMaze.level.width - 1);

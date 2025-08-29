@@ -1,33 +1,9 @@
-HazyMaze.player = class {
-    constructor() {
-        this.x = 0;
-        this.y = 0;
+HazyMaze.player = class extends HazyMaze.entity {
+    init() {
         this.taken = {};
         this.direction = 90;
         this.state = 2;
         this.moveAlong = false;
-    }
-
-    goto(x, y) {
-        this.x = x;
-        this.y = y;
-        this.taken = {};
-        this.moveAlong = false;
-    }
-
-    getTileAt(x, y) {
-        return HazyMaze.level.getTile(Math.floor(x), Math.floor(y));
-    }
-
-    getTileID(x, y) {
-        return (Math.floor(y) * HazyMaze.level.width) + Math.floor(x);
-    }
-
-    getInTileOffset(x, y) {
-        return [
-            Math.floor((x % 1) * 50) / 50,
-            Math.floor((y % 1) * 50) / 50,
-        ]
     }
 
     update() {
@@ -109,9 +85,7 @@ HazyMaze.player = class {
 
         HazyMaze.shader.setUniforms({
             u_cameraPos: [this.x, 0, this.y],
-            u_cameraRot: converted,
+            u_cameraRot: [...converted, (HazyMaze.canvas.height / HazyMaze.canvas.width) / 0.75],
         });
     }
 };
-
-HazyMaze.currentPlayer = new HazyMaze.player();

@@ -25,7 +25,16 @@ HazyMaze.generate = () => {
 
 
     let spawnPos = getRandomSpawn();
-    HazyMaze.currentPlayer.x = spawnPos[0] + 0.5;
-    HazyMaze.currentPlayer.y = spawnPos[1] + 0.5;
-    HazyMaze.currentPlayer.stepTime = 1;
+    const player = new HazyMaze.player(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
+    HazyMaze.level.entities.push(player);
+
+    //Night Lights
+    if (HazyMaze.isNight) {
+        for (let i = 0; i<32; i++) {
+            spawnPos = getRandomSpawn();
+            
+            const light = new HazyMaze.light(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
+            HazyMaze.level.entities.push(light);
+        }
+    }
 }

@@ -1006,6 +1006,9 @@ window.DaveShade = {};
             return Array.from(output);
         }
 
+        //Go back to canvas
+        daveShadeInstance.renderToCanvas();
+
         return daveShadeInstance;
     };  
 
