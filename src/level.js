@@ -3,6 +3,12 @@ HazyMaze.NORTH = 1;
 HazyMaze.SOUTH = 2;
 HazyMaze.EAST = 4;
 HazyMaze.WEST = 8;
+HazyMaze.EMPTY = HazyMaze.NORTH + HazyMaze.SOUTH + HazyMaze.EAST + HazyMaze.WEST
+//Textures
+HazyMaze.NORTH_ALT = 16;
+HazyMaze.SOUTH_ALT = 32;
+HazyMaze.EAST_ALT = 64;
+HazyMaze.WEST_ALT = 128;
 
 HazyMaze.level = {
     //Function that creates a blank level
@@ -10,7 +16,7 @@ HazyMaze.level = {
         HazyMaze.level.width = width;
         HazyMaze.level.height = height;
         HazyMaze.level.tiles = new Uint8Array(width*height);
-        for (let i in HazyMaze.level.tiles) { HazyMaze.level.tiles[i] = 255 }
+        for (let i in HazyMaze.level.tiles) { HazyMaze.level.tiles[i] = HazyMaze.EMPTY }
         HazyMaze.entities = [];
         return HazyMaze.level.tiles;
     },
@@ -34,10 +40,21 @@ HazyMaze.level = {
         let returned = 0;
 
         //Check directions and augment accordingly
-        if (HazyMaze.level.getTile(x + 1, y) == 255) if (HazyMaze.level.getTile(x + 1, y) & HazyMaze.WEST) returned |= HazyMaze.EAST;
-        if (HazyMaze.level.getTile(x - 1, y) == 255) if (HazyMaze.level.getTile(x - 1, y) & HazyMaze.EAST) returned |= HazyMaze.WEST;
-        if (HazyMaze.level.getTile(x, y + 1) == 255) if (HazyMaze.level.getTile(x, y + 1) & HazyMaze.SOUTH) returned |= HazyMaze.NORTH;
-        if (HazyMaze.level.getTile(x, y - 1) == 255) if (HazyMaze.level.getTile(x, y - 1) & HazyMaze.NORTH) returned |= HazyMaze.SOUTH;
+        if (!(HazyMaze.level.getTile(x + 1, y) ^ HazyMaze.EMPTY)) if (HazyMaze.level.getTile(x + 1, y) & HazyMaze.WEST) returned |= HazyMaze.EAST;
+        if (!(HazyMaze.level.getTile(x - 1, y) ^ HazyMaze.EMPTY)) if (HazyMaze.level.getTile(x - 1, y) & HazyMaze.EAST) returned |= HazyMaze.WEST;
+        if (!(HazyMaze.level.getTile(x, y + 1) ^ HazyMaze.EMPTY)) if (HazyMaze.level.getTile(x, y + 1) & HazyMaze.SOUTH) returned |= HazyMaze.NORTH;
+        if (!(HazyMaze.level.getTile(x, y - 1) ^ HazyMaze.EMPTY)) if (HazyMaze.level.getTile(x, y - 1) & HazyMaze.NORTH) returned |= HazyMaze.SOUTH;
+
+        return returned;
+    },
+    getMovesFrom: (x, y) => {
+        let returned = 0;
+
+        //Check directions and augment accordingly
+        if (!(HazyMaze.level.getTile(x, y) & HazyMaze.EAST)) returned |= HazyMaze.EAST;
+        if (!(HazyMaze.level.getTile(x, y) & HazyMaze.WEST)) returned |= HazyMaze.WEST;
+        if (!(HazyMaze.level.getTile(x, y) & HazyMaze.NORTH)) returned |= HazyMaze.NORTH;
+        if (!(HazyMaze.level.getTile(x, y) & HazyMaze.SOUTH)) returned |= HazyMaze.SOUTH;
 
         return returned;
     },

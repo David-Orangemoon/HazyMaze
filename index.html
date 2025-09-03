@@ -6,6 +6,20 @@
     <title>Hazy Maze</title>
 </head>
 <body>
+    <style>
+        body {
+            background-color: #000000;
+        }
+        
+        canvas {
+            top: 0px;
+            left: 0px;
+            position: absolute;
+            
+            width: 100%;
+            height: 100%;
+        }
+    </style>
     <canvas id="generationDebug" width="640" height="480"></canvas>
     <script>window.HazyMaze={};</script>
     <script src="src/backupImage.js"></script>
@@ -18,17 +32,8 @@
     <script src="src/entities/light.js"></script>
     <script src="src/entities/player.js"></script>
     <script src="src/finalGen.js"></script>
+    <script src="src/shaders.js"></script>
     <script src="src/renderer.js"></script>
     <script src="src/mainLoop.js"></script>
-    <style>
-        canvas {
-            top: 0px;
-            left: 0px;
-            position: absolute;
-            
-            width: 100%;
-            height: 100%;
-        }
-    </style>
 </body>
 </html>

@@ -44,6 +44,22 @@
         HazyMaze.meshPoints += 6;
     }
 
+    HazyMaze.getTileBounds = (tile,imageWidth) => {
+        return [
+            [tile/imageWidth, 0],
+            [(tile + 1)/imageWidth, 0],
+            [tile/imageWidth, 1],
+            [(tile + 1)/imageWidth, 1]
+        ];
+    };
+    HazyMaze.tiles = {
+        FLOOR: HazyMaze.getTileBounds(0,6),
+        CEILING: HazyMaze.getTileBounds(2,6),
+
+        WALL: HazyMaze.getTileBounds(1,6),
+        WALL_ALT: HazyMaze.getTileBounds(3,6),
+    }
+
     HazyMaze.mesh = null;
     HazyMaze.meshPoints = 0;
     HazyMaze.genMesh = () => {
@@ -62,13 +78,13 @@
                 const tile = HazyMaze.level.getTile(x,y);
 
                 //Make sure we aren't an empty version
-                if (tile != 255) {
+                if ((tile & HazyMaze.EMPTY)) {
                     //Floor
                     addQuad(json,
-                        x, -0.5, y, 0, 0,
-                        x + 1, -0.5, y, 1/3, 0,
-                        x, -0.5, y + 1, 0, 1,
-                        x + 1, -0.5, y + 1, 1/3, 1,
+                        x, -0.5, y, ...HazyMaze.tiles.FLOOR[0],
+                        x + 1, -0.5, y, ...HazyMaze.tiles.FLOOR[1],
+                        x, -0.5, y + 1, ...HazyMaze.tiles.FLOOR[2],
+                        x + 1, -0.5, y + 1, ...HazyMaze.tiles.FLOOR[3],
 
                         0, 1, 0,
                         1,1,1
@@ -76,61 +92,65 @@
                     
                     //Ceiling
                     addQuad(json,
-                        x + 1, 0.5, y, 2/3, 0,
-                        x, 0.5, y, 1, 0,
-                        x + 1, 0.5, y + 1, 2/3, 1,
-                        x, 0.5, y + 1, 1, 1,
+                        x + 1, 0.5, y, ...HazyMaze.tiles.CEILING[0],
+                        x, 0.5, y, ...HazyMaze.tiles.CEILING[1],
+                        x + 1, 0.5, y + 1, ...HazyMaze.tiles.CEILING[2],
+                        x, 0.5, y + 1, ...HazyMaze.tiles.CEILING[3],
 
                         0, -1, 0,
-                        1,1,1
+                        1,0.95,0.95
                     );
 
                     //Walls
+                    let wallTex = (tile & HazyMaze.NORTH_ALT) ? HazyMaze.tiles.WALL_ALT : HazyMaze.tiles.WALL;
                     if (tile & HazyMaze.NORTH) {
                         addQuad(json,
-                            x, -0.5, y + 1, 1/3, 1,
-                            x + 1, -0.5, y + 1, 2/3, 1,
-                            x, 0.5, y + 1, 1/3, 0,
-                            x + 1, 0.5, y + 1, 2/3, 0,
+                            x, -0.5, y + 1, ...wallTex[2],
+                            x + 1, -0.5, y + 1, ...wallTex[3],
+                            x, 0.5, y + 1, ...wallTex[0],
+                            x + 1, 0.5, y + 1, ...wallTex[1],
 
                             0, 0, -1,
                             1,1,1
                         );
                     }
-
+                    
+                    wallTex = (tile & HazyMaze.SOUTH_ALT) ? HazyMaze.tiles.WALL_ALT : HazyMaze.tiles.WALL;
                     if (tile & HazyMaze.SOUTH) {
                         addQuad(json,
-                            x + 1, -0.5, y, 1/3, 1,
-                            x, -0.5, y, 2/3, 1,
-                            x + 1, 0.5, y, 1/3, 0,
-                            x, 0.5, y, 2/3, 0,
+                            x + 1, -0.5, y, ...wallTex[2],
+                            x, -0.5, y, ...wallTex[3],
+                            x + 1, 0.5, y, ...wallTex[0],
+                            x, 0.5, y, ...wallTex[1],
 
                             0, 0, 1,
                             1,1,1
                         );
                     }
 
+                    wallTex = (tile & HazyMaze.WEST_ALT) ? HazyMaze.tiles.WALL_ALT : HazyMaze.tiles.WALL;
                     if (tile & HazyMaze.WEST) {
                         addQuad(json,
-                            x, -0.5, y, 1/3, 1,
-                            x, -0.5, y + 1, 2/3, 1,
-                            x, 0.5, y, 1/3, 0,
-                            x, 0.5, y + 1, 2/3, 0,
+                            x, -0.5, y, ...wallTex[2],
+                            x, -0.5, y + 1, ...wallTex[3],
+                            x, 0.5, y, ...wallTex[0],
+                            x, 0.5, y + 1, ...wallTex[1],
 
                             1, 0, 0,
-                            1,1,1
+                            0.9,0.9,0.9
                         );
                     }
 
+                    wallTex = (tile & HazyMaze.EAST_ALT) ? HazyMaze.tiles.WALL_ALT : HazyMaze.tiles.WALL;
                     if (tile & HazyMaze.EAST) {
                         addQuad(json,
-                            x + 1, -0.5, y + 1, 1/3, 1,
-                            x + 1, -0.5, y, 2/3, 1,
-                            x + 1, 0.5, y + 1, 1/3, 0,
-                            x + 1, 0.5, y, 2/3, 0,
+                            x + 1, -0.5, y + 1, ...wallTex[2],
+                            x + 1, -0.5, y, ...wallTex[3],
+                            x + 1, 0.5, y + 1, ...wallTex[0],
+                            x + 1, 0.5, y, ...wallTex[1],
 
                             -1, 0, 0,
-                            1,1,1
+                            0.9,0.9,0.9
                         );
                     }
                 }

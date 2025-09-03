@@ -40,5 +40,15 @@ HazyMaze.genMaze = () => {
         paths = HazyMaze.level.getPathsFrom(...mazyPosition);
     }
 
+    for (let y=0; y<HazyMaze.level.height; y++) {
+        for (let x=0; x<HazyMaze.level.width; x++) {
+            const tile = HazyMaze.level.getTile(x, y)
+            if (Math.randomIRange(0, 100) == 50 && (tile & HazyMaze.NORTH)) HazyMaze.level.setTile(x, y, HazyMaze.level.getTile(x, y) | HazyMaze.NORTH_ALT);
+            if (Math.randomIRange(0, 100) == 50 && (tile & HazyMaze.EAST)) HazyMaze.level.setTile(x, y, HazyMaze.level.getTile(x, y) | HazyMaze.EAST_ALT);
+            if (Math.randomIRange(0, 100) == 50 && (tile & HazyMaze.SOUTH)) HazyMaze.level.setTile(x, y, HazyMaze.level.getTile(x, y) | HazyMaze.SOUTH_ALT);
+            if (Math.randomIRange(0, 100) == 50 && (tile & HazyMaze.WEST)) HazyMaze.level.setTile(x, y, HazyMaze.level.getTile(x, y) | HazyMaze.WEST_ALT);
+        }
+    }
+
     return HazyMaze.level.tiles;
 };

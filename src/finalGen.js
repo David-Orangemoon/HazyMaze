@@ -9,7 +9,7 @@ HazyMaze.generate = () => {
             const tile = HazyMaze.level.getTile(x,y);
 
             //Make sure we aren't an empty version
-            if (tile != 255) {
+            if ((tile & HazyMaze.EMPTY)) {
                 spawnCandidates.push([x,y]);
             }
         }

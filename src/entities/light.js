@@ -8,7 +8,7 @@ HazyMaze.light = class extends HazyMaze.entity {
     }
     update() {
         HazyMaze.addLightToRender([
-            this.x,0,this.y,
+            this.x,0.25,this.y,
             ...this.color,
             0.25,3,0
         ])

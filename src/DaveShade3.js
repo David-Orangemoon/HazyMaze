@@ -570,7 +570,6 @@ window.DaveShade = {};
                 //* The setter
                 shader.attributes[attributeDef.name].set = (newValue) => {
                     if (daveShadeInstance.oldAttributes[location] == newValue.bufferID) return;
-                    console.log(`set ${attributeDef.name}`);
                     daveShadeInstance.oldAttributes[location] = newValue.bufferID;
                     GL.bindBuffer(GL.ARRAY_BUFFER, newValue);
                     GL.vertexAttribPointer(location, divisions, GL.FLOAT, false, 0, 0);
@@ -836,7 +835,7 @@ window.DaveShade = {};
         }
 
         //Framebuffer stuff
-        daveShadeInstance.createFramebuffer = (width, height, attachments, antiAliasing) => {
+        daveShadeInstance.createFramebuffer = (width, height, attachments) => {
             const framebuffer = {
                 buffer: GL.createFramebuffer(),
                 attachments: [],
@@ -965,22 +964,24 @@ window.DaveShade = {};
         daveShadeInstance.textureReadingQuad = daveShadeInstance.buffersFromJSON({
             a_position: new Float32Array(
                 [
+                    1,-1,0,1,
+                    -1,-1,0,1,
+                    1,1,0,1,
+
                     -1,-1,0,1,
                     -1,1,0,1,
-                    1,-1,0,1,
-                    -1,1,0,1,
-                    1,-1,0,1,
-                    1,1,0,1,
+                    1,1,0,1
                 ]
             ),
-            a_texCoord: new Float32Array(
+            a_texcoord: new Float32Array(
                 [
-                    0,1,
-                    0,0,
-                    1,1,
-                    0,0,
-                    1,1,
                     1,0,
+                    0,0,
+                    1,1,
+
+                    0,0,
+                    0,1,
+                    1,1
                 ]
             )
         });
