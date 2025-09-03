@@ -17,9 +17,29 @@ HazyMaze.initilizeShaders = () => {
         uniform vec3 u_cameraPos;
         uniform vec4 u_cameraRot;
 
+        uniform mat3 u_transform;
+
         void main() {
             //Set the position
             vec3 r_position = a_position;
+
+            //Move to transform
+            r_position += vec3(u_transform[0].z, u_transform[1].z, u_transform[2].z);
+            //Yaw
+            r_position.xz = vec2(
+                r_position.z * u_transform[0].x + r_position.x * u_transform[0].y,
+                r_position.z * u_transform[0].y - r_position.x * u_transform[0].x
+            );
+            //Pitch
+            r_position.yz = vec2(
+                r_position.z * u_transform[1].x + r_position.y * u_transform[1].y,
+                r_position.z * u_transform[1].y - r_position.y * u_transform[1].x
+            );
+            //Roll
+            r_position.xy = vec2(
+                r_position.y * u_transform[2].x + r_position.x * u_transform[2].y,
+                r_position.y * u_transform[2].y - r_position.x * u_transform[2].x
+            );
 
             //For the entrance animation
             if (abs(dot(vec3(0,1,0), a_normal)) != 1.0) { r_position.y = (r_position.y + 0.5) * u_cameraRot.w - 0.5; }
@@ -29,10 +49,9 @@ HazyMaze.initilizeShaders = () => {
             
             //Position around the camera
             r_position -= u_cameraPos;
-            r_position = vec3(
-            r_position.z * u_cameraRot.x + r_position.x * u_cameraRot.y,
-            r_position.y,
-            r_position.z * u_cameraRot.y - r_position.x * u_cameraRot.x
+            r_position.xz = vec2(
+                r_position.z * u_cameraRot.x + r_position.x * u_cameraRot.y,
+                r_position.z * u_cameraRot.y - r_position.x * u_cameraRot.x
             );
             
             //Debug view
@@ -64,6 +83,7 @@ HazyMaze.initilizeShaders = () => {
 
         void main() {
             o_color = texture(u_texture, v_texcoord) * v_color;
+            o_color.xyz *= mix(vec3(0.9,0.9,0.9), vec3(1.0,1.0,1.0), abs(dot(v_normal, vec3(1,0,0))));
             o_position = vec4(v_position, 1);
             o_normal = vec4(v_normal, 1);
         }`
@@ -97,6 +117,11 @@ HazyMaze.initilizeShaders = () => {
             vec3 r_position = texture2D(u_position, v_texcoord).xyz;
             vec3 r_normal = texture2D(u_normal, v_texcoord).xyz;
             vec3 lightTotal = u_ambient;
+
+            //Scrapped idea for "LED LIGHTS"
+            //float ceilLightInfluence = max(0.0, (r_position.y - 0.25) * 4.0);
+            //if (abs(dot(r_normal, vec3(0,1,0))) == 1.0) { ceilLightInfluence = 0.0; }
+            //lightTotal += ceilLightInfluence;
 
             for (int i=0; i<64; i++) {
                 //Break if we pass

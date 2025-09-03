@@ -17,6 +17,11 @@ HazyMaze.update = () => {
     if (HazyMaze.mesh && HazyMaze.shader && HazyMaze.texture) {
         HazyMaze.shader.setUniforms({
             u_texture: HazyMaze.texture.texture,
+            u_transform: [
+                0,1,0,
+                0,1,0,
+                0,1,0
+            ]
         });
 
         HazyMaze.shader.setBuffers(HazyMaze.mesh);
