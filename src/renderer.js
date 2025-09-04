@@ -43,3 +43,10 @@ HazyMaze.textureImage.onload = () => {
 
 if (location.protocol == "file:") HazyMaze.textureImage.src = HazyMaze.BackupImage;
 else HazyMaze.textureImage.src = "assets/TILES.png";
+
+HazyMaze.whiteImage = new Image();
+HazyMaze.whiteImage.onload = () => {
+    HazyMaze.white = HazyMaze.daveShade.createTexture(HazyMaze.whiteImage);
+    HazyMaze.white.setFiltering(DaveShade.filtering.NEAREST, true);
+}
+HazyMaze.whiteImage.src = HazyMaze.BackupWhite;
