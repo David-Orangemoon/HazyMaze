@@ -3,24 +3,30 @@ HazyMaze.update = () => {
     HazyMaze.canvas.height = 480;//window.innerHeight;
     HazyMaze.daveShade.GL.viewport(0, 0, HazyMaze.canvas.width, HazyMaze.canvas.height);
 
-    //Setup render
-    HazyMaze.framebuffer.use();
-    HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT);
-    HazyMaze.daveShade.cullFace(DaveShade.side.BACK);
-
-    HazyMaze.lights = 0;
-    for (let entID in HazyMaze.level.entities) {
-        HazyMaze.level.entities[entID].update();
-    }
-
     //Render maze
-    if (HazyMaze.mesh && HazyMaze.shader && HazyMaze.texture) {
+    if (HazyMaze.mesh && HazyMaze.texture) {
+        //Setup render
+        HazyMaze.framebuffer.use();
+        HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT);
+
+        //Draw objects
+        HazyMaze.daveShade.cullFace(DaveShade.side.NEITHER);
+        HazyMaze.lights = 0;
+        for (let entID in HazyMaze.level.entities) {
+            HazyMaze.level.entities[entID].update();
+        }
+
+        //Draw maze
+        HazyMaze.daveShade.cullFace(DaveShade.side.BACK);
         HazyMaze.shader.setUniforms({
             u_texture: HazyMaze.texture.texture,
             u_transform: [
                 0,1,0,
                 0,1,0,
                 0,1,0
+            ],
+            u_angleShade: [
+                1,0,0,0.85
             ]
         });
 

@@ -1,18 +1,23 @@
-HazyMaze.player = class extends HazyMaze.entity {
+HazyMaze.floatingShape = class extends HazyMaze.entity {
     init() {
-        this.shape = HazyMaze.meshes.torus;
+        const keys = Object.keys(HazyMaze.meshes);
+        this.shape = HazyMaze.meshes[keys[Math.randomIRange(0, keys.length - 1)]];
     }
 
     update() {
         HazyMaze.shader.setUniforms({
+            u_texture: HazyMaze.texture.texture,
             u_transform: [
                 0, 1, this.x, 
                 0, 1, 0,
                 0, 1, this.y
             ],
+            u_angleShade: [
+                0.625,0.25,0.125,0.5
+            ]
         });
 
-        HazyMaze.shader.setBuffers(this.shape);
-        HazyMaze.postProcess.drawFromBuffers(6);
+        HazyMaze.shader.setBuffers(this.shape.mesh);
+        HazyMaze.shader.drawFromBuffers(this.shape.pointCount);
     }
 };

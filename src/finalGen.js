@@ -37,4 +37,12 @@ HazyMaze.generate = () => {
             HazyMaze.level.entities.push(light);
         }
     }
+
+    //Shapes
+    for (let i = 0; i<32; i++) {
+        spawnPos = getRandomSpawn();
+        
+        const floatingShape = new HazyMaze.floatingShape(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
+        HazyMaze.level.entities.push(floatingShape);
+    }
 }
