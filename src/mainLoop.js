@@ -1,3 +1,6 @@
+HazyMaze.lastTime = Date.now();
+HazyMaze.deltaTime = 0.016;
+
 HazyMaze.update = () => {
     HazyMaze.canvas.width = 640;//window.innerWidth;
     HazyMaze.canvas.height = 480;//window.innerHeight;
@@ -6,18 +9,17 @@ HazyMaze.update = () => {
     //Render maze
     if (HazyMaze.mesh && HazyMaze.texture) {
         //Setup render
+        HazyMaze.daveShade.cullFace(DaveShade.side.BACK);
         HazyMaze.framebuffer.use();
         HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT);
 
         //Draw objects
-        HazyMaze.daveShade.cullFace(DaveShade.side.NEITHER);
         HazyMaze.lights = 0;
         for (let entID in HazyMaze.level.entities) {
             HazyMaze.level.entities[entID].update();
         }
 
         //Draw maze
-        HazyMaze.daveShade.cullFace(DaveShade.side.BACK);
         HazyMaze.shader.setUniforms({
             u_texture: HazyMaze.texture.texture,
             u_transform: [
@@ -48,6 +50,9 @@ HazyMaze.update = () => {
     HazyMaze.postProcess.drawFromBuffers(6);
 
     requestAnimationFrame(HazyMaze.update);
+
+    HazyMaze.deltaTime = (Date.now() - HazyMaze.lastTime) / 1000;
+    HazyMaze.lastTime = Date.now();
 }
 
 HazyMaze.generate();

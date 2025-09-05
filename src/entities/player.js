@@ -92,7 +92,7 @@ HazyMaze.player = class extends HazyMaze.entity {
                 if (dd <= -180) this.direction -= 360;
                 this.direction += (this.tDirection - this.direction) * 0.0625;
 
-                this.interp += 0.015;
+                this.interp += HazyMaze.deltaTime;
                 break;
 
                 break;

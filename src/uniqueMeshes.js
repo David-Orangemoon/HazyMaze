@@ -31,9 +31,9 @@
                         line[3].split("/"),
                     ];
 
-                    json.a_position.push(points.a_position[Number(verts[0][0]) - 1], points.a_position[Number(verts[1][0]) - 1], points.a_position[Number(verts[2][0]) - 1]);
-                    json.a_texcoord.push(points.a_texcoord[Number(verts[0][1]) - 1], points.a_texcoord[Number(verts[1][1]) - 1], points.a_texcoord[Number(verts[2][1]) - 1]);
-                    json.a_normal.push(points.a_normal[Number(verts[0][2]) - 1], points.a_normal[Number(verts[1][2]) - 1], points.a_normal[Number(verts[2][2]) - 1]);
+                    json.a_position.push(points.a_position[Number(verts[1][0]) - 1], points.a_position[Number(verts[0][0]) - 1], points.a_position[Number(verts[2][0]) - 1]);
+                    json.a_texcoord.push(points.a_texcoord[Number(verts[1][1]) - 1], points.a_texcoord[Number(verts[0][1]) - 1], points.a_texcoord[Number(verts[2][1]) - 1]);
+                    json.a_normal.push(points.a_normal[Number(verts[1][2]) - 1], points.a_normal[Number(verts[0][2]) - 1], points.a_normal[Number(verts[2][2]) - 1]);
                     
                     pointCount += 3;
                     break;

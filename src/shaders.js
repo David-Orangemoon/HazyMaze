@@ -22,9 +22,8 @@ HazyMaze.initilizeShaders = () => {
         void main() {
             //Set the position
             vec3 r_position = a_position;
+            vec3 r_normal = a_normal;
 
-            //Move to transform
-            r_position += vec3(u_transform[0].z, u_transform[1].z, u_transform[2].z);
             //Yaw
             r_position.xz = vec2(
                 r_position.z * u_transform[0].x + r_position.x * u_transform[0].y,
@@ -39,6 +38,24 @@ HazyMaze.initilizeShaders = () => {
             r_position.xy = vec2(
                 r_position.y * u_transform[2].x + r_position.x * u_transform[2].y,
                 r_position.y * u_transform[2].y - r_position.x * u_transform[2].x
+            );
+            //Move to transform
+            r_position += vec3(u_transform[0].z, u_transform[1].z, u_transform[2].z);
+
+            //Yaw
+            r_normal.xz = vec2(
+                r_normal.z * u_transform[0].x + r_normal.x * u_transform[0].y,
+                r_normal.z * u_transform[0].y - r_normal.x * u_transform[0].x
+            );
+            //Pitch
+            r_normal.yz = vec2(
+                r_normal.z * u_transform[1].x + r_normal.y * u_transform[1].y,
+                r_normal.z * u_transform[1].y - r_normal.y * u_transform[1].x
+            );
+            //Roll
+            r_normal.xy = vec2(
+                r_normal.y * u_transform[2].x + r_normal.x * u_transform[2].y,
+                r_normal.y * u_transform[2].y - r_normal.x * u_transform[2].x
             );
 
             //For the entrance animation
@@ -65,7 +82,7 @@ HazyMaze.initilizeShaders = () => {
             //Set varyings
             v_texcoord = a_texcoord;
             v_color = a_color;
-            v_normal = a_normal;
+            v_normal = r_normal;
         }`,
         `#version 300 es
         precision highp float;
