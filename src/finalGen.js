@@ -20,6 +20,19 @@ HazyMaze.generate = () => {
         const output = spawnCandidates[candidateID];
         spawnCandidates.splice(candidateID, 1);
 
+        if (spawnCandidates.length == 0) {
+            for (let y=0; y<HazyMaze.level.height; y++) {
+                for (let x=0; x<HazyMaze.level.width; x++) {
+                    const tile = HazyMaze.level.getTile(x,y);
+
+                    //Make sure we aren't an empty version
+                    if ((tile & HazyMaze.EMPTY)) {
+                        spawnCandidates.push([x,y]);
+                    }
+                }
+            }
+        }
+
         return output;
     }
 
@@ -39,10 +52,18 @@ HazyMaze.generate = () => {
     }
 
     //Shapes
-    for (let i = 0; i<32; i++) {
+    for (let i = 0; i<4; i++) {
         spawnPos = getRandomSpawn();
         
         const floatingShape = new HazyMaze.floatingShape(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
         HazyMaze.level.entities.push(floatingShape);
+    }
+
+    //RATS RATS!
+    for (let i = 0; i<4; i++) {
+        spawnPos = getRandomSpawn();
+        
+        const light = new HazyMaze.rat(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
+        HazyMaze.level.entities.push(light);
     }
 }

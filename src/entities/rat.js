@@ -1,11 +1,8 @@
-HazyMaze.player = class extends HazyMaze.entity {
+HazyMaze.rat = class extends HazyMaze.entity {
     init() {
         this.route = [];
-        this.direction = 90;
-        this.tDirection = 90;
         this.interp = 0;
-        this.state = 4;
-        this.popup = 0;
+        this.state = 0;
 
         this.createRoute();
     }
@@ -64,16 +61,13 @@ HazyMaze.player = class extends HazyMaze.entity {
     }
 
     update() {
-        let converted = this.direction * 0.01745329;
-        converted = [Math.sin(converted), Math.cos(converted)];
-
         //Movement
         switch (this.state) {
             //Move forward
             case 0:
                 //Current and next positions
-                const cur = Math.floor(this.interp);
-                const nex = cur + 1;
+                const cur = Math.floor(this.interp) % this.route.length;
+                const nex = (cur + 1) % this.route.length;
 
                 //Calculate deltas
                 const dx = this.route[nex][0] - this.route[cur][0];
@@ -83,42 +77,26 @@ HazyMaze.player = class extends HazyMaze.entity {
                 this.x = this.route[cur][0] + (dx) * (this.interp % 1) + 0.5;
                 this.y = this.route[cur][1] + (dy) * (this.interp % 1) + 0.5;
 
-                //First get the Arc Tangent, the turn it into degrees, then flip it if y<0 else explode
-                this.tDirection = -((Math.atan2(-dy, dx) * 180 / Math.PI) + 90);
-
-                const dd = this.tDirection - this.direction;
-                if (dd >= 180) this.direction += 360;
-                if (dd <= -180) this.direction -= 360;
-                this.direction += (this.tDirection - this.direction) * 0.0625;
-
                 this.interp += HazyMaze.deltaTime;
                 break;
-
-                break;
-            
-            //Turning
-            case 1:
-                this.direction -= 2;
-                if (this.direction % 90 == 0) this.state = 0;
-                break;
-            
-            case 2:
-                this.direction += 2;
-                if (this.direction % 90 == 0) this.state = 0;
-                break;
-
-            //Initial animation
-            case 4:
-                if (this.popup < 1) this.popup += 0.01;
-                else {
-                    this.state = 0;
-                    this.popup = 1;
-                }
         }
 
+        const cameraRotation = HazyMaze.shader.uniforms.u_cameraRot.value;
+
         HazyMaze.shader.setUniforms({
-            u_cameraPos: [this.x, 0, this.y],
-            u_cameraRot: [...converted, (HazyMaze.canvas.height / HazyMaze.canvas.width) / 0.75, this.popup],
+            u_texture: HazyMaze.texture.texture,
+            u_uvTransform: [4/6,0, 1/6,1],
+            u_transform: [
+                -cameraRotation[0], cameraRotation[1], this.x, 
+                0, 1, Math.abs(Math.sin(this.interp * Math.PI * 2) * 0.25),
+                0, 1, this.y
+            ],
+            u_angleShade: [
+                0.625,-0.25,0.125,0.5
+            ]
         });
+
+        HazyMaze.shader.setBuffers(HazyMaze.billboard);
+        HazyMaze.shader.drawFromBuffers(6);
     }
 };

@@ -293,4 +293,29 @@
     f 1/1/22 2/3/22 23/29/22
     f 2/6/23 3/5/23 24/33/23
     f 24/33/24 3/5/24 1/1/24`);
+
+    //Generate billboard mesh
+    const json = {
+        a_position: [],
+        a_texcoord: [],
+        a_color: [],
+        a_normal: [],
+    };
+
+    HazyMaze.addQuad(json,
+        -0.5, -0.5, 0, 0, 1,
+        0.5, -0.5, 0, 1, 1,
+        -0.5, 0.5, 0, 0, 0,
+        0.5, 0.5, 0, 1, 0,
+
+        0, 0, -1,
+        1,1,1
+    );
+
+    json.a_color = new Float32Array(json.a_color);
+    json.a_position = new Float32Array(json.a_position);
+    json.a_texcoord = new Float32Array(json.a_texcoord);
+    json.a_normal = new Float32Array(json.a_normal);
+
+    HazyMaze.billboard = HazyMaze.daveShade.buffersFromJSON(json);
 })();

@@ -22,6 +22,7 @@ HazyMaze.update = () => {
         //Draw maze
         HazyMaze.shader.setUniforms({
             u_texture: HazyMaze.texture.texture,
+            u_uvTransform: [0,0, 1,1],
             u_transform: [
                 0,1,0,
                 0,1,0,

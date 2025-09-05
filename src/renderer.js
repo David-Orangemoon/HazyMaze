@@ -35,6 +35,7 @@ HazyMaze.textureImage = new Image();
 HazyMaze.textureImage.onload = () => {
     HazyMaze.texture = HazyMaze.daveShade.createTexture(HazyMaze.textureImage);
     HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, true);
+    HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, false);
 
     HazyMaze.shader.setUniforms({
         u_texture: HazyMaze.texture.texture,

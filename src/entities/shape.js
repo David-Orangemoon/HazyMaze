@@ -14,6 +14,7 @@ HazyMaze.floatingShape = class extends HazyMaze.entity {
     update() {
         HazyMaze.shader.setUniforms({
             u_texture: HazyMaze.white.texture,
+            u_uvTransform: [0,0, 1,1],
             u_transform: [
                 ...this.yaw, this.x, 
                 ...this.pitch, 0,

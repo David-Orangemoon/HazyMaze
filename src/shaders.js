@@ -18,11 +18,13 @@ HazyMaze.initilizeShaders = () => {
         uniform vec4 u_cameraRot;
 
         uniform mat3 u_transform;
+        uniform vec4 u_uvTransform;
 
         void main() {
             //Set the position
             vec3 r_position = a_position;
             vec3 r_normal = a_normal;
+            vec2 r_texcoord = a_texcoord;
 
             //Yaw
             r_position.xz = vec2(
@@ -72,6 +74,7 @@ HazyMaze.initilizeShaders = () => {
             );
             
             //Debug view
+            //r_position.xz = -r_position.xz;
             //r_position = -(r_position).xzy + vec3(0,0,2);
             //r_position.z += r_position.y;
 
@@ -79,8 +82,14 @@ HazyMaze.initilizeShaders = () => {
             gl_Position = vec4(r_position - vec3(0,0,0.25), r_position.z) * 10.0;
             gl_Position.x *= u_cameraRot.z;
 
+            //Transform UVs
+            r_texcoord.x = fract(r_texcoord.x);
+
+            r_texcoord *= u_uvTransform.zw;
+            r_texcoord += u_uvTransform.xy;
+
             //Set varyings
-            v_texcoord = a_texcoord;
+            v_texcoord = r_texcoord;
             v_color = a_color;
             v_normal = r_normal;
         }`,
@@ -101,6 +110,8 @@ HazyMaze.initilizeShaders = () => {
         
         void main() {
             o_color = texture(u_texture, v_texcoord) * v_color;
+            if (o_color.w == 0.0) { discard; }
+
             o_color.xyz *= mix(vec3(0.9,0.9,0.9), vec3(u_angleShade.w), min(abs(dot(v_normal, u_angleShade.xyz)) * 2.0, 1.0));
             o_position = vec4(v_position, 1);
             o_normal = vec4(v_normal, 1);
