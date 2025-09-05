@@ -77,7 +77,7 @@ HazyMaze.rat = class extends HazyMaze.entity {
                 this.x = this.route[cur][0] + (dx) * (this.interp % 1) + 0.5;
                 this.y = this.route[cur][1] + (dy) * (this.interp % 1) + 0.5;
 
-                this.interp += HazyMaze.deltaTime;
+                this.interp += HazyMaze.deltaTime * 1.5;
                 break;
         }
 
@@ -92,7 +92,7 @@ HazyMaze.rat = class extends HazyMaze.entity {
                 0, 1, this.y
             ],
             u_angleShade: [
-                0.625,-0.25,0.125,0.5
+                0.625,-0.25,0.125,1.0
             ]
         });
 
