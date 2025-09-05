@@ -1,3 +1,4 @@
+//I'm Ditzy itzy bitsy! :3
 HazyMaze.floatingShape = class extends HazyMaze.entity {
     init() {
         const keys = Object.keys(HazyMaze.meshes);
@@ -30,5 +31,6 @@ HazyMaze.floatingShape = class extends HazyMaze.entity {
 
         this.yaw = [Math.sin(this.timer), Math.cos(this.timer)];
         this.pitch = [Math.sin(this.timer * 2), Math.cos(this.timer * 2)];
+        this.roll = [Math.sin(this.timer * 0.5), Math.cos(this.timer * 0.5)];
     }
 };
