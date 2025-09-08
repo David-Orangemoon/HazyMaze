@@ -14,9 +14,6 @@ HazyMaze.initilizeShaders();
 
 HazyMaze.isNight = Math.randomIRange(0, 4) == 0;
 
-if (HazyMaze.isNight) HazyMaze.postProcess.setUniforms({u_ambient: [0.1,0.2,0.25]});
-else HazyMaze.postProcess.setUniforms({u_ambient: [1,1,1]});
-
 //Light stuff :)
 HazyMaze.lights = 0;
 HazyMaze.lightQueue = new Array(64)
@@ -52,6 +49,7 @@ HazyMaze.whiteImage.onload = () => {
 }
 HazyMaze.whiteImage.src = HazyMaze.BackupWhite;
 
+//Options
 HazyMaze.fitToScreen = true;
 HazyMaze.overrideSize = { x: 640, y: 480 };
 HazyMaze.stretchToFit = false;

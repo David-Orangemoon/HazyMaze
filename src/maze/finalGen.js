@@ -1,7 +1,12 @@
 HazyMaze.mazeDimensions = { x: 16, y: 16 };
 
 HazyMaze.generate = () => {
+    //Remove entities
     HazyMaze.level.entities = [];
+
+    //Set Settings
+    if (HazyMaze.isNight) HazyMaze.postProcess.setUniforms({u_ambient: [0.1,0.2,0.25]});
+    else HazyMaze.postProcess.setUniforms({u_ambient: [1,1,1]});
 
     HazyMaze.level.createEmpty(HazyMaze.mazeDimensions.x, HazyMaze.mazeDimensions.y);
     HazyMaze.genMaze();

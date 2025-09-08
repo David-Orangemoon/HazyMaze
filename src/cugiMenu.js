@@ -3,6 +3,7 @@
 
     holder.appendChild(CUGI.createList([
         { type: "vec2", key: "mazeDimensions", text: "New Size", target: HazyMaze },
+        { type: "boolean", key: "isNight", text: "Night Mode", target: HazyMaze},
         { type: "button", text: "New Maze", onclick: () => {
             HazyMaze.generate();
         }},
