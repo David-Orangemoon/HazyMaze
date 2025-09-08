@@ -51,3 +51,28 @@ HazyMaze.whiteImage.onload = () => {
     HazyMaze.white.setFiltering(DaveShade.filtering.NEAREST, true);
 }
 HazyMaze.whiteImage.src = HazyMaze.BackupWhite;
+
+HazyMaze.fitToScreen = true;
+HazyMaze.overrideSize = { x: 640, y: 480 };
+HazyMaze.stretchToFit = false;
+HazyMaze.adjustScreenSize = () => {
+    //Resize to fit
+    let newSize = [];
+    if (HazyMaze.fitToScreen) newSize = [window.innerWidth, window.innerHeight];
+    else newSize = [HazyMaze.overrideSize.x, HazyMaze.overrideSize.y];
+
+    //Resize buffers
+    HazyMaze.framebuffer.resize(...newSize);
+    HazyMaze.canvas.width = newSize[0];
+    HazyMaze.canvas.height = newSize[1];
+
+    //Apply CSS
+    if (HazyMaze.stretchToFit) HazyMaze.canvas.style.setProperty("--aspectRatio", window.innerWidth/window.innerHeight);
+    else HazyMaze.canvas.style.setProperty("--aspectRatio", newSize[0]/newSize[1]);
+}
+
+window.addEventListener("resize", () => {
+    HazyMaze.adjustScreenSize();
+})
+
+HazyMaze.adjustScreenSize();

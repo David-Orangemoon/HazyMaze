@@ -2,8 +2,8 @@ HazyMaze.lastTime = Date.now();
 HazyMaze.deltaTime = 0.016;
 
 HazyMaze.update = () => {
-    HazyMaze.canvas.width = window.innerWidth;
-    HazyMaze.canvas.height = window.innerHeight;
+    
+    
     HazyMaze.daveShade.GL.viewport(0, 0, HazyMaze.canvas.width, HazyMaze.canvas.height);
 
     //Render maze
@@ -11,7 +11,7 @@ HazyMaze.update = () => {
         //Setup render
         HazyMaze.daveShade.cullFace(DaveShade.side.BACK);
         HazyMaze.framebuffer.use();
-        HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT);
+        HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT | HazyMaze.daveShade.GL.COLOR_BUFFER_BIT);
 
         //Draw objects
         HazyMaze.lights = 0;

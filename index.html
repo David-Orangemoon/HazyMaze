@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hazy Maze</title>
+    <link rel="stylesheet" href="src/cugi.css">
 </head>
 <body>
     <style>
@@ -12,32 +13,50 @@
         }
         
         canvas {
+            --aspectRatio: 1;
+
             top: 0px;
-            left: 0px;
+            left: 50%;
             position: absolute;
             
-            width: 100%;
+            aspect-ratio: var(--aspectRatio);
+            width: auto;
             height: 100%;
+
+            transform: translate(-50%, 0%);
+        }
+
+        #CUGI-holder {
+            position: absolute;
+            background-color: #00000099;
+        }
+
+        .CUGI-PropertyName {
+            color: #dfdfdf;
         }
     </style>
     <canvas id="generationDebug" width="640" height="480"></canvas>
     <script>window.HazyMaze={};</script>
-    <script src="src/backupImage.js"></script>
-    <script src="src/daveShade3.js"></script>
+    <script src="src/renderer/backupImage.js"></script>
+    <script src="src/renderer/daveShade3.js"></script>
     <script src="src/helper.js"></script>
-    <script src="src/level.js"></script>
-    <script src="src/mazeGen.js"></script>
-    <script src="src/meshGen.js"></script>
+    <script src="src/maze/level.js"></script>
+    <script src="src/maze/mazeGen.js"></script>
+    <script src="src/maze/meshGen.js"></script>
     <script src="src/entities/base.js"></script>
     <script src="src/entities/light.js"></script>
     <script src="src/entities/player.js"></script>
     <script src="src/entities/rat.js"></script>
     <script src="src/entities/daveshadeBillboard.js"></script>
     <script src="src/entities/shape.js"></script>
-    <script src="src/finalGen.js"></script>
-    <script src="src/shaders.js"></script>
-    <script src="src/renderer.js"></script>
-    <script src="src/uniqueMeshes.js"></script>
+    <script src="src/maze/finalGen.js"></script>
+    <script src="src/renderer/shaders.js"></script>
+    <script src="src/renderer/renderer.js"></script>
+    <script src="src/renderer/uniqueMeshes.js"></script>
     <script src="src/mainLoop.js"></script>
+
+    <div id="CUGI-holder"></div>
+    <script src="src/cugi.js"></script>
+    <script src="src/cugiMenu.js"></script>
 </body>
 </html>

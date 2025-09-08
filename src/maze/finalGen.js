@@ -1,4 +1,9 @@
+HazyMaze.mazeDimensions = { x: 16, y: 16 };
+
 HazyMaze.generate = () => {
+    HazyMaze.level.entities = [];
+
+    HazyMaze.level.createEmpty(HazyMaze.mazeDimensions.x, HazyMaze.mazeDimensions.y);
     HazyMaze.genMaze();
     HazyMaze.genMesh();
 
@@ -68,7 +73,7 @@ HazyMaze.generate = () => {
     }
 
     //Billboards!
-    for (let i = 0; i<4; i++) {
+    for (let i = 0; i<64; i++) {
         spawnPos = getRandomSpawn();
         
         const billboard = new HazyMaze.billboardObject(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
