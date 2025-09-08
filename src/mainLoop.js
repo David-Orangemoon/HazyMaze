@@ -2,8 +2,8 @@ HazyMaze.lastTime = Date.now();
 HazyMaze.deltaTime = 0.016;
 
 HazyMaze.update = () => {
-    HazyMaze.canvas.width = 640;//window.innerWidth;
-    HazyMaze.canvas.height = 480;//window.innerHeight;
+    HazyMaze.canvas.width = window.innerWidth;
+    HazyMaze.canvas.height = window.innerHeight;
     HazyMaze.daveShade.GL.viewport(0, 0, HazyMaze.canvas.width, HazyMaze.canvas.height);
 
     //Render maze
