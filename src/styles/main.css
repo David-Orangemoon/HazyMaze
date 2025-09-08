@@ -1,0 +1,36 @@
+body {
+    background-color: #000000;
+}
+
+canvas {
+    --aspectRatio: 1;
+
+    top: 0px;
+    left: 50%;
+    position: absolute;
+    
+    aspect-ratio: var(--aspectRatio);
+    width: auto;
+    height: 100%;
+
+    transform: translate(-50%, 0%);
+}
+
+/* Style CUGI Objects */
+#CUGI-holder {
+    position: absolute;
+    background-color: #00000044;
+    backdrop-filter: blur(4px);
+
+    /* Border*/
+    border-color: #ffffff77;
+    border-radius: 12px;
+    border-style: solid;
+    border-width: 4px;
+
+    padding: 4px;
+}
+
+.CUGI-PropertyName {
+    color: #dfdfdf;
+}

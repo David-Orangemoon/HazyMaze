@@ -4,37 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hazy Maze</title>
-    <link rel="stylesheet" href="src/cugi.css">
+    <link rel="stylesheet" href="src/styles/cugi.css">
+    <link rel="stylesheet" href="src/styles/main.css">
 </head>
 <body>
-    <style>
-        body {
-            background-color: #000000;
-        }
-        
-        canvas {
-            --aspectRatio: 1;
-
-            top: 0px;
-            left: 50%;
-            position: absolute;
-            
-            aspect-ratio: var(--aspectRatio);
-            width: auto;
-            height: 100%;
-
-            transform: translate(-50%, 0%);
-        }
-
-        #CUGI-holder {
-            position: absolute;
-            background-color: #00000099;
-        }
-
-        .CUGI-PropertyName {
-            color: #dfdfdf;
-        }
-    </style>
     <canvas id="generationDebug" width="640" height="480"></canvas>
     <script>window.HazyMaze={};</script>
     <script src="src/renderer/backupImage.js"></script>

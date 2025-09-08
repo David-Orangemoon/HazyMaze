@@ -1,5 +1,6 @@
 HazyMaze.lastTime = Date.now();
 HazyMaze.deltaTime = 0.016;
+HazyMaze.timescale = 1;
 
 HazyMaze.update = () => {
     
@@ -52,7 +53,7 @@ HazyMaze.update = () => {
 
     requestAnimationFrame(HazyMaze.update);
 
-    HazyMaze.deltaTime = (Date.now() - HazyMaze.lastTime) / 1000;
+    HazyMaze.deltaTime = ((Date.now() - HazyMaze.lastTime) / 1000) * HazyMaze.timescale;
     HazyMaze.lastTime = Date.now();
 }
 

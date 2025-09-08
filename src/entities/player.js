@@ -73,6 +73,12 @@ HazyMaze.player = class extends HazyMaze.entity {
             case 0:
                 //Current and next positions
                 const cur = Math.floor(this.interp);
+
+                if (cur == this.route.length - 1) {
+                    this.state = 5;
+                    return;
+                }
+
                 const nex = cur + 1;
 
                 //Calculate deltas
@@ -86,17 +92,28 @@ HazyMaze.player = class extends HazyMaze.entity {
                 //First get the Arc Tangent, the turn it into degrees, then flip it if y<0 else explode
                 this.tDirection = -((Math.atan2(-dy, dx) * 180 / Math.PI) + 90);
 
-                const dd = this.tDirection - this.direction;
+                let dd = this.tDirection - this.direction;
                 if (dd >= 180) this.direction += 360;
                 if (dd <= -180) this.direction -= 360;
-                this.direction += (this.tDirection - this.direction) * 0.0625;
+
+                //Recalculate and turn
+                dd = this.tDirection - this.direction;
+                //Turn and compensate for overturn
+                if (dd > 0) {
+                    this.direction += 180 * HazyMaze.deltaTime;
+                    if (this.direction > this.tDirection) this.direction = this.tDirection;
+                }
+                else if (dd < 0) {
+                    this.direction -= 180 * HazyMaze.deltaTime;
+                    if (this.direction < this.tDirection) this.direction = this.tDirection;
+                }
 
                 this.interp += HazyMaze.deltaTime;
                 break;
 
                 break;
             
-            //Turning
+            //Turning (Unused)
             case 1:
                 this.direction -= 2;
                 if (this.direction % 90 == 0) this.state = 0;
@@ -109,11 +126,22 @@ HazyMaze.player = class extends HazyMaze.entity {
 
             //Initial animation
             case 4:
-                if (this.popup < 1) this.popup += 0.01;
+                if (this.popup < 1) this.popup += 0.5 * HazyMaze.deltaTime;
                 else {
                     this.state = 0;
                     this.popup = 1;
                 }
+                break;
+            
+            //Exit animation
+            case 5:
+                if (this.popup > 0) this.popup -= 0.5 * HazyMaze.deltaTime;
+                else {
+                    this.state = 4;
+                    this.popup = 0;
+                    HazyMaze.generate()
+                }
+                break;
         }
 
         HazyMaze.shader.setUniforms({
