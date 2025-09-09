@@ -599,6 +599,9 @@ window.DaveShade = {};
                 //? Loop through the keys
                 shader.usingIndices = false;
                 for (let key in attributeJSON) {
+                    //Make sure we are using a buffer
+                    if (!(attributeJSON[key] instanceof WebGLBuffer)) return;
+                    
                     //* if it exists set the attribute
                     if (key == DaveShade.IndiceIdent) {
                         const newValue = attributeJSON[key];
@@ -931,6 +934,12 @@ window.DaveShade = {};
                 }
 
                 returned[key] = buffer;
+            }
+
+            //Remove buffers
+            returned.dispose = () => {
+                //It's gone :(
+                for (const key in attributeJSON) { GL.deleteBuffer(returned[key]); }
             }
 
             return returned;

@@ -1,5 +1,6 @@
 (function() {
     const holder = document.getElementById("CUGI-holder");
+    let popup = true;
 
     holder.appendChild(CUGI.createList([
         { type: "boolean", key: "fitToScreen", text: "Fit to Screen", target: HazyMaze, onchange: HazyMaze.adjustScreenSize},
@@ -14,5 +15,19 @@
         { type: "button", text: "New Maze", onclick: () => {
             HazyMaze.generate();
         }},
+        "---",
+        "---",
+        "Hazy Maze created by",
+        { type: "link", text: "ObviousAlexC", link:"https://github.com/David-Orangemoon" },
+        "press O to collapse this menu"
     ]));
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key.toLowerCase() == "o") {
+            popup = !popup;
+
+            if (popup) holder.style.opacity = "100%";
+            else holder.style.opacity = "0%";
+        }
+    });
 })();

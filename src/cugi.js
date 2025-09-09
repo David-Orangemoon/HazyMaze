@@ -72,6 +72,15 @@
                 button.className = "CUGI-Button";
 
                 return button;
+            },
+            link: (data) => {
+                const link = document.createElement("a");
+                link.innerText = data.text || "No text";
+                link.href = data.link || "https://github.com/Coffee-Engine/CUGI";
+                link.className = "CUGI-PropertyName CUGI-Label CUGI-Link"
+
+                return link;
+
             }
         },
 

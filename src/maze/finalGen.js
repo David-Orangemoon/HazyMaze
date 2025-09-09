@@ -1,6 +1,9 @@
 HazyMaze.mazeDimensions = { x: 16, y: 16 };
 
 HazyMaze.generate = () => {
+    //Clear previous mesh
+    if (HazyMaze.mesh) HazyMaze.mesh.dispose();
+    
     //Remove entities
     HazyMaze.level.entities = [];
 
