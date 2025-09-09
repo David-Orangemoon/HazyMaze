@@ -11,7 +11,8 @@
         "---",
         "---",
         { type: "vec2", key: "mazeDimensions", text: "New Size", target: HazyMaze },
-        { type: "boolean", key: "isNight", text: "Night Mode", target: HazyMaze},
+        { type: "boolean", key: "isNight", text: "Night Mode", target: HazyMaze },
+        { type: "int", key: "ratCount", text: "Rat Count", min: 0, max: 25, target: HazyMaze },
         { type: "button", text: "New Maze", onclick: () => {
             HazyMaze.generate();
         }},

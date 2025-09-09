@@ -1,4 +1,5 @@
 HazyMaze.mazeDimensions = { x: 16, y: 16 };
+HazyMaze.ratCount = 2;
 
 HazyMaze.generate = () => {
     //Clear previous mesh
@@ -73,7 +74,7 @@ HazyMaze.generate = () => {
     }
 
     //RATS RATS!
-    for (let i = 0; i<4; i++) {
+    for (let i = 0; i<HazyMaze.ratCount; i++) {
         spawnPos = getRandomSpawn();
         
         const rat = new HazyMaze.rat(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
@@ -81,7 +82,7 @@ HazyMaze.generate = () => {
     }
 
     //Billboards!
-    for (let i = 0; i<64; i++) {
+    for (let i = 0; i<4; i++) {
         spawnPos = getRandomSpawn();
         
         const billboard = new HazyMaze.billboardObject(spawnPos[0] + 0.5, spawnPos[1] + 0.5);

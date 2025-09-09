@@ -50,7 +50,7 @@ HazyMaze.whiteImage.onload = () => {
 HazyMaze.whiteImage.src = HazyMaze.BackupWhite;
 
 //Options
-HazyMaze.fitToScreen = true;
+HazyMaze.fitToScreen = false;
 HazyMaze.overrideSize = { x: 640, y: 480 };
 HazyMaze.stretchToFit = false;
 HazyMaze.adjustScreenSize = () => {
