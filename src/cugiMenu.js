@@ -2,6 +2,31 @@
     const holder = document.getElementById("CUGI-holder");
     let popup = true;
 
+    
+    const filePopup = document.createElement("input");
+    filePopup.type = "file";
+    filePopup.accept = ".png,.jpeg,.jpg,.webp";
+
+    const fileReader = new FileReader;
+
+    //Read into texture
+    fileReader.onload = () => {
+
+        const image = new Image();
+        image.onload = () => {
+            HazyMaze.texture = HazyMaze.daveShade.createTexture(image);
+            HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, true);
+            HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, false);
+        }
+        image.src = fileReader.result;
+    }
+
+    //File Popup
+    filePopup.onchange = (event) => {
+        const file = event.target.files[0];
+        fileReader.readAsDataURL(file);
+    }
+
     holder.appendChild(CUGI.createList([
         { type: "boolean", key: "fitToScreen", text: "Fit to Screen", target: HazyMaze, onchange: HazyMaze.adjustScreenSize},
         { type: "vec2", key: "overrideSize", text: "Screen Size", target: HazyMaze, onchange: HazyMaze.adjustScreenSize },
@@ -16,6 +41,12 @@
         { type: "button", text: "New Maze", onclick: () => {
             HazyMaze.generate();
         }},
+        "---",
+        "---",
+        { type: "button", text: "Upload Texture", onclick: () => {
+            filePopup.click();
+        }},
+        { type: "link", text: "Original Texture", link: "/assets/tiles.png" },
         "---",
         "---",
         "Hazy Maze created by",

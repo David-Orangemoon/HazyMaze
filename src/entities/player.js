@@ -74,7 +74,7 @@ HazyMaze.player = class extends HazyMaze.entity {
                 //Current and next positions
                 const cur = Math.floor(this.interp);
 
-                if (cur == this.route.length - 1) {
+                if (cur >= this.route.length - 1) {
                     this.state = 5;
                     return;
                 }
@@ -145,7 +145,7 @@ HazyMaze.player = class extends HazyMaze.entity {
         }
 
         HazyMaze.shader.setUniforms({
-            u_cameraPos: [this.x, 0, this.y],
+            u_cameraPos: [this.x, 0.05, this.y],
             u_cameraRot: [...converted, (HazyMaze.canvas.height / HazyMaze.canvas.width) / 0.75, this.popup],
         });
     }
