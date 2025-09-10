@@ -46,7 +46,7 @@
         { type: "button", text: "Upload Texture", onclick: () => {
             filePopup.click();
         }},
-        { type: "link", text: "Original Texture", link: "/assets/tiles.png" },
+        { type: "link", text: "Original Texture", link: `${location.href.replaceAll(/\/$/g, "")}/assets/TILES.png` },
         "---",
         "---",
         "Hazy Maze created by",
