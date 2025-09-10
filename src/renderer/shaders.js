@@ -110,7 +110,7 @@ HazyMaze.initilizeShaders = () => {
         
         void main() {
             o_color = texture(u_texture, v_texcoord) * v_color;
-            if (o_color.w != 1.0) { discard; }
+            if (o_color.w <= 0.5) { discard; }
 
             o_color.xyz *= mix(vec3(0.9,0.9,0.9), vec3(u_angleShade.w), min(abs(dot(v_normal, u_angleShade.xyz)) * 2.0, 1.0));
             o_position = vec4(v_position, 1);

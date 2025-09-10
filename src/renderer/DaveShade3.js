@@ -323,6 +323,7 @@ window.DaveShade = {};
             GL.blendEquation(GL[daveShadeInstance.blendFunc[0]]);
             GL.blendFunc(GL[daveShadeInstance.blendFunc[1]], GL[daveShadeInstance.blendFunc[2]]);
         }
+        
         GL.pixelStorei(GL.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 
         //*When we need to split the shader into 2 parts due to it being in a single file. good for keeping storage sizes down
@@ -555,7 +556,7 @@ window.DaveShade = {};
                         shader.attributes[attributeDef.name].divisions = 1;
                         break;
                 }
-
+                
                 const location = shader.attributes[attributeDef.name].location;
                 const divisions = shader.attributes[attributeDef.name].divisions;
 
@@ -601,7 +602,7 @@ window.DaveShade = {};
                 for (let key in attributeJSON) {
                     //Make sure we are using a buffer
                     if (!(attributeJSON[key] instanceof WebGLBuffer)) return;
-                    
+
                     //* if it exists set the attribute
                     if (key == DaveShade.IndiceIdent) {
                         const newValue = attributeJSON[key];
@@ -982,7 +983,7 @@ window.DaveShade = {};
                     1,1,0,1
                 ]
             ),
-            a_texcoord: new Float32Array(
+            a_texCoord: new Float32Array(
                 [
                     1,0,
                     0,0,
@@ -1016,9 +1017,8 @@ window.DaveShade = {};
             return Array.from(output);
         }
 
-        //Go back to canvas
+        //? Make sure we are rendering to the canvas!!!
         daveShadeInstance.renderToCanvas();
-
         return daveShadeInstance;
     };  
 
