@@ -5,12 +5,12 @@ HazyMaze.timescale = 1;
 HazyMaze.update = () => {
     
     
-    HazyMaze.daveShade.GL.viewport(0, 0, HazyMaze.canvas.width, HazyMaze.canvas.height);
+    HazyMaze.daveShade.viewport(0, 0, HazyMaze.canvas.width, HazyMaze.canvas.height);
 
     //Render maze
     if (HazyMaze.mesh && HazyMaze.texture) {
         //Setup render
-        HazyMaze.daveShade.cullFace(DaveShade.side.BACK);
+        HazyMaze.daveShade.cullFace(HazyMaze.daveShade.SIDE.BACK);
         HazyMaze.framebuffer.use();
         HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT | HazyMaze.daveShade.GL.COLOR_BUFFER_BIT);
 
@@ -41,14 +41,14 @@ HazyMaze.update = () => {
     //Move render to canvas and finalize
     HazyMaze.daveShade.renderToCanvas();
     HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT);
-    HazyMaze.daveShade.cullFace(DaveShade.side.NEITHER);
+    HazyMaze.daveShade.cullFace(HazyMaze.daveShade.SIDE.NEITHER);
     HazyMaze.postProcess.setUniforms({
         u_lightCount: HazyMaze.lights,
-        u_color: HazyMaze.framebuffer.attachments[0].texture,
-        u_position: HazyMaze.framebuffer.attachments[1].texture,
-        u_normal: HazyMaze.framebuffer.attachments[2].texture,
+        u_color: HazyMaze.framebuffer.ATTACHMENTS[0].texture,
+        u_position: HazyMaze.framebuffer.ATTACHMENTS[1].texture,
+        u_normal: HazyMaze.framebuffer.ATTACHMENTS[2].texture,
     });
-    HazyMaze.postProcess.setBuffers(HazyMaze.daveShade.textureReadingQuad);
+    HazyMaze.postProcess.setBuffers(HazyMaze.daveShade.TEXTURE_READING_QUAD);
     HazyMaze.postProcess.drawFromBuffers(6);
 
     requestAnimationFrame(HazyMaze.update);

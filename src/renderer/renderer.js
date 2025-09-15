@@ -1,13 +1,13 @@
 HazyMaze.canvas = document.getElementById("generationDebug");
 HazyMaze.daveShade = DaveShade.createInstance(HazyMaze.canvas, { antialias: false, preserveDrawingBuffer: true });
-HazyMaze.daveShade.cullFace(DaveShade.side.BACK);
+HazyMaze.daveShade.cullFace(HazyMaze.daveShade.SIDE.BACK);
 HazyMaze.daveShade.useZBuffer(true);
 
 HazyMaze.framebuffer = HazyMaze.daveShade.createFramebuffer(640, 480, [
-    DaveShade.RENDERBUFFER_TYPES.TEXTURE_RGBA, //Color
-    DaveShade.RENDERBUFFER_TYPES.TEXTURE_RGBA_FLOAT, //Position
-    DaveShade.RENDERBUFFER_TYPES.TEXTURE_RGBA_FLOAT, //Normal
-    DaveShade.RENDERBUFFER_TYPES.DEPTH, //Depth
+    HazyMaze.daveShade.RENDERBUFFER_TYPE.TEXTURE_RGBA, //Color
+    HazyMaze.daveShade.RENDERBUFFER_TYPE.TEXTURE_RGBA_FLOAT, //Position
+    HazyMaze.daveShade.RENDERBUFFER_TYPE.TEXTURE_RGBA_FLOAT, //Normal
+    HazyMaze.daveShade.RENDERBUFFER_TYPE.DEPTH, //Depth
 ]);
 
 HazyMaze.initilizeShaders();
@@ -31,8 +31,8 @@ HazyMaze.addLightToRender = (light) => {
 HazyMaze.textureImage = new Image();
 HazyMaze.textureImage.onload = () => {
     HazyMaze.texture = HazyMaze.daveShade.createTexture(HazyMaze.textureImage);
-    HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, true);
-    HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, false);
+    HazyMaze.texture.setFiltering(HazyMaze.daveShade.FILTERING.NEAREST, true);
+    HazyMaze.texture.setFiltering(HazyMaze.daveShade.FILTERING.NEAREST, false);
 
     HazyMaze.shader.setUniforms({
         u_texture: HazyMaze.texture.texture,
@@ -45,7 +45,8 @@ else HazyMaze.textureImage.src = "assets/TILES.png";
 HazyMaze.whiteImage = new Image();
 HazyMaze.whiteImage.onload = () => {
     HazyMaze.white = HazyMaze.daveShade.createTexture(HazyMaze.whiteImage);
-    HazyMaze.white.setFiltering(DaveShade.filtering.NEAREST, true);
+    HazyMaze.white.setFiltering(HazyMaze.daveShade.FILTERING.NEAREST, true);
+    HazyMaze.white.setFiltering(HazyMaze.daveShade.FILTERING.NEAREST, false);
 }
 HazyMaze.whiteImage.src = HazyMaze.BackupWhite;
 

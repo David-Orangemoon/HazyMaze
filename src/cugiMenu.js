@@ -15,8 +15,8 @@
         const image = new Image();
         image.onload = () => {
             HazyMaze.texture = HazyMaze.daveShade.createTexture(image);
-            HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, true);
-            HazyMaze.texture.setFiltering(DaveShade.filtering.NEAREST, false);
+            HazyMaze.texture.setFiltering(HazyMaze.daveShade.FILTERING.NEAREST, true);
+            HazyMaze.texture.setFiltering(HazyMaze.daveShade.FILTERING.NEAREST, false);
         }
         image.src = fileReader.result;
     }
