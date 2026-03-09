@@ -22,7 +22,7 @@ HazyMaze.addLightToRender = (light) => {
     HazyMaze.lightQueue[HazyMaze.lights] = light;
 
     //Set uniform
-    HazyMaze.postProcess.uniforms.u_lights[HazyMaze.lights].value = light;
+    HazyMaze.shaders.postProcess.uniforms.u_lights[HazyMaze.lights].value = light;
 
     HazyMaze.lights++;
 }

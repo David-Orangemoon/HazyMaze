@@ -34,4 +34,12 @@ HazyMaze.floatingShape = class extends HazyMaze.entity {
         this.pitch = [Math.sin(this.timer * 2), Math.cos(this.timer * 2)];
         this.roll = [Math.sin(this.timer * 0.5), Math.cos(this.timer * 0.5)];
     }
+
+    touchedPlayer(player) {
+        if (this.inactive) return;
+
+        this.inactive = true;
+        player.targetRoll += 180;
+        console.log("TOUHED")
+    }
 };

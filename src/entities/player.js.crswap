@@ -69,7 +69,7 @@ HazyMaze.player = class extends HazyMaze.entity {
 
     collideLine(line) {
         const pointLineX = Math.min(line.x + 1, Math.max(line.x, line.x + (this.x - line.x) * line.dx));
-        const pointLineY = Math.min(line.y + 1, Math.max(line.y, line.y + (this.y - line.y) * line.dy));
+        const pointLineY = Math.min(line.y + 1, Math.max(line.x, line.y + (this.y - line.y) * line.dy));
 
         const distance = Math.sqrt(Math.pow(this.x - pointLineX, 2) + Math.pow(this.y - pointLineY, 2));
         if (distance < 0.25) {

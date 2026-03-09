@@ -24,12 +24,18 @@ HazyMaze.entity = class {
         return (Math.floor(y) * HazyMaze.level.width) + Math.floor(x);
     }
 
+    getCurrentTileID() {
+        return this.getTileID(this.x, this.y);
+    }
+
     getInTileOffset(x, y) {
         return [
             Math.floor((x % 1) * 50) / 50,
             Math.floor((y % 1) * 50) / 50,
         ]
     }
+
+    touchedPlayer(player) {}
 
     init() {}
     update() {}

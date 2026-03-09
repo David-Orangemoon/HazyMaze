@@ -15,7 +15,7 @@ HazyMaze.initilizeShaders = () => {
         out vec3 v_normal;
 
         uniform vec3 u_cameraPos;
-        uniform vec4 u_cameraRot;
+        uniform mat3 u_cameraRot;
 
         uniform mat3 u_transform;
         uniform vec4 u_uvTransform;
@@ -61,7 +61,7 @@ HazyMaze.initilizeShaders = () => {
             );
 
             //For the entrance animation
-            if (abs(dot(vec3(0,1,0), a_normal)) != 1.0) { r_position.y = (r_position.y + 0.5) * u_cameraRot.w - 0.5; }
+            if (abs(dot(vec3(0,1,0), a_normal)) != 1.0) { r_position.y = (r_position.y + 0.5) * u_cameraRot[2][1] - 0.5; }
 
             //We set the position here pre-camera transformation
             v_position = r_position;
@@ -69,8 +69,13 @@ HazyMaze.initilizeShaders = () => {
             //Position around the camera
             r_position -= u_cameraPos;
             r_position.xz = vec2(
-                r_position.z * u_cameraRot.x + r_position.x * u_cameraRot.y,
-                r_position.z * u_cameraRot.y - r_position.x * u_cameraRot.x
+                r_position.z * u_cameraRot[0][0] + r_position.x * u_cameraRot[0][1],
+                r_position.z * u_cameraRot[0][1] - r_position.x * u_cameraRot[0][0]
+            );
+
+            r_position.xy = vec2(
+                r_position.y * u_cameraRot[1][0] + r_position.x * u_cameraRot[1][1],
+                r_position.y * u_cameraRot[1][1] - r_position.x * u_cameraRot[1][0]
             );
             
             //Debug view
@@ -80,7 +85,7 @@ HazyMaze.initilizeShaders = () => {
 
             //position it on screen
             gl_Position = vec4(r_position - vec3(0,0,0.25), r_position.z) * 10.0;
-            gl_Position.x *= u_cameraRot.z;
+            gl_Position.x *= u_cameraRot[2][0];
 
             //Transform UVs
             if (r_texcoord.x > 1.0) { r_texcoord.x = fract(r_texcoord.x); }
@@ -118,58 +123,84 @@ HazyMaze.initilizeShaders = () => {
         }`
     );
 
-    HazyMaze.postProcess = HazyMaze.daveShade.createShader(
-        `precision highp float;
+    const vertex = `precision highp float;
 
-        attribute vec4 a_position;
-        attribute vec2 a_texcoord;
+    attribute vec4 a_position;
+    attribute vec2 a_texcoord;
 
-        varying vec2 v_texcoord;
+    varying vec2 v_texcoord;
 
-        void main() {
-            gl_Position = a_position;
-            v_texcoord = a_texcoord;
-        }`,
-        `precision highp float;
+    void main() {
+        gl_Position = a_position;
+        v_texcoord = a_texcoord;
+    }`;
 
-        varying vec2 v_texcoord;
-        
-        uniform sampler2D u_color;
-        uniform sampler2D u_position;
-        uniform sampler2D u_normal;
-        uniform vec3 u_ambient;
+    const fragment = `precision highp float;
 
-        uniform mat3 u_lights[64];
-        uniform float u_lightCount;
+    varying vec2 v_texcoord;
+    
+    uniform sampler2D u_color;
+    uniform sampler2D u_position;
+    uniform sampler2D u_normal;
+    uniform vec3 u_ambient;
 
-        void main() {
-            vec3 r_position = texture2D(u_position, v_texcoord).xyz;
-            vec3 r_normal = texture2D(u_normal, v_texcoord).xyz;
-            vec3 lightTotal = u_ambient;
+    uniform mat3 u_lights[64];
+    uniform float u_lightCount;
 
-            //Scrapped idea for "LED LIGHTS"
-            //float ceilLightInfluence = max(0.0, (r_position.y - 0.25) * 4.0);
-            //if (abs(dot(r_normal, vec3(0,1,0))) == 1.0) { ceilLightInfluence = 0.0; }
-            //lightTotal += ceilLightInfluence;
+    void main() {
+        gl_FragColor = texture2D([shader], v_texcoord);
+    }`;
 
-            for (int i=0; i<64; i++) {
-                //Break if we pass
-                if (i >= int(u_lightCount)) { break; }
-                vec3 offset = r_position - u_lights[i][0];
+    HazyMaze.shaders = {
+        postProcess: HazyMaze.daveShade.createShader(
+            vertex,
+            `precision highp float;
 
-                if (dot(offset, r_normal) > 0.0) { continue; }
+            varying vec2 v_texcoord;
+            
+            uniform sampler2D u_color;
+            uniform sampler2D u_position;
+            uniform sampler2D u_normal;
+            uniform vec3 u_ambient;
 
-                //Calculate light stuff
-                float influence = (u_lights[i][2][0] / pow(length(offset), u_lights[i][2][1]));
-                if (influence < 0.01) { continue; }
+            uniform mat3 u_lights[64];
+            uniform float u_lightCount;
 
-                vec3 color = u_lights[i][1];
+            void main() {
+                vec3 r_position = texture2D(u_position, v_texcoord).xyz;
+                vec3 r_normal = texture2D(u_normal, v_texcoord).xyz;
+                vec3 lightTotal = u_ambient;
 
-                //Add total
-                lightTotal += influence * color;
-            }
+                //Scrapped idea for "LED LIGHTS"
+                //float ceilLightInfluence = max(0.0, (r_position.y - 0.25) * 4.0);
+                //if (abs(dot(r_normal, vec3(0,1,0))) == 1.0) { ceilLightInfluence = 0.0; }
+                //lightTotal += ceilLightInfluence;
 
-            gl_FragColor = texture2D(u_color, v_texcoord) * vec4(lightTotal,1);
-        }`
-    );
+                for (int i=0; i<64; i++) {
+                    //Break if we pass
+                    if (i >= int(u_lightCount)) { break; }
+                    vec3 offset = r_position - u_lights[i][0];
+
+                    if (dot(offset, r_normal) > 0.0) { continue; }
+
+                    //Calculate light stuff
+                    float influence = (u_lights[i][2][0] / pow(length(offset), u_lights[i][2][1]));
+                    if (influence < 0.01) { continue; }
+
+                    vec3 color = u_lights[i][1];
+
+                    //Add total
+                    lightTotal += influence * color;
+                }
+
+                gl_FragColor = texture2D(u_color, v_texcoord) * vec4(lightTotal,1);
+            }`
+        ),
+
+
+        colorOnly: HazyMaze.daveShade.createShader(
+            vertex,
+            fragment.replace("[shader]", "u_color")
+        ),
+    }
 }

@@ -38,10 +38,13 @@
         { type: "vec2", key: "mazeDimensions", text: "New Size", target: HazyMaze },
         { type: "boolean", key: "isNight", text: "Night Mode", target: HazyMaze },
         { type: "int", key: "ratCount", text: "Rat Count", min: 0, max: 25, target: HazyMaze },
+        { type: "int", key: "shapeCount", text: "Shape Count", min: 0, max: 25, target: HazyMaze },
         { type: "button", text: "New Maze", onclick: () => {
             HazyMaze.generate();
         }},
         "---",
+        "---",
+        { type: "boolean", key: "userControlled", text: "Control!", target: HazyMaze},
         "---",
         { type: "button", text: "Upload Texture", onclick: () => {
             filePopup.click();
@@ -54,7 +57,10 @@
         "press O to collapse this menu"
     ]));
 
+    HazyMaze.keysDown = {};
+
     document.addEventListener("keydown", (event) => {
+        HazyMaze.keysDown[event.key.toLowerCase()] = true;
         if (event.key.toLowerCase() == "o") {
             popup = !popup;
 
@@ -62,4 +68,8 @@
             else holder.style.opacity = "0%";
         }
     });
+    
+    document.addEventListener("keyup", (event) => {
+        HazyMaze.keysDown[event.key.toLowerCase()] = false;
+    })
 })();

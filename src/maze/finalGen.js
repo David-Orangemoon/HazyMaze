@@ -1,5 +1,6 @@
 HazyMaze.mazeDimensions = { x: 16, y: 16 };
 HazyMaze.ratCount = 2;
+HazyMaze.shapeCount = 8;
 
 HazyMaze.generate = () => {
     //Clear previous mesh
@@ -9,8 +10,8 @@ HazyMaze.generate = () => {
     HazyMaze.level.entities = [];
 
     //Set Settings
-    if (HazyMaze.isNight) HazyMaze.postProcess.setUniforms({u_ambient: [0.1,0.2,0.25]});
-    else HazyMaze.postProcess.setUniforms({u_ambient: [1,1,1]});
+    if (HazyMaze.isNight) HazyMaze.shaders.postProcess.setUniforms({u_ambient: [0.1,0.2,0.25]});
+    else HazyMaze.shaders.postProcess.setUniforms({u_ambient: [1,1,1]});
 
     HazyMaze.level.createEmpty(HazyMaze.mazeDimensions.x, HazyMaze.mazeDimensions.y);
     HazyMaze.genMaze();
@@ -66,7 +67,7 @@ HazyMaze.generate = () => {
     }
 
     //Shapes
-    for (let i = 0; i<4; i++) {
+    for (let i = 0; i<HazyMaze.shapeCount; i++) {
         spawnPos = getRandomSpawn();
         
         const floatingShape = new HazyMaze.floatingShape(spawnPos[0] + 0.5, spawnPos[1] + 0.5);
