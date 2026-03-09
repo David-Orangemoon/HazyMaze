@@ -119,6 +119,7 @@ HazyMaze.player = class extends HazyMaze.entity {
             Math.sin(convertedRoll), Math.cos(convertedRoll), 0
         ];
 
+        //Simple FPS movement if the user requests it.
         if (HazyMaze.userControlled && this.state != 4) {
             if (HazyMaze.keysDown["a"]) this.direction += 180 * HazyMaze.deltaTime * converted[4];
             if (HazyMaze.keysDown["d"]) this.direction -= 180 * HazyMaze.deltaTime * converted[4];
