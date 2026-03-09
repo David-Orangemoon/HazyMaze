@@ -51,12 +51,14 @@ HazyMaze.getTileBounds = (tile,imageWidth) => {
         [(tile + 1)/imageWidth, 1]
     ];
 };
-HazyMaze.tiles = {
-    FLOOR: HazyMaze.getTileBounds(0,6),
-    CEILING: HazyMaze.getTileBounds(2,6),
 
-    WALL: HazyMaze.getTileBounds(1,6),
-    WALL_ALT: HazyMaze.getTileBounds(3,6),
+HazyMaze.atlasSize = 7;
+HazyMaze.tiles = {
+    FLOOR: HazyMaze.getTileBounds(0,HazyMaze.atlasSize),
+    CEILING: HazyMaze.getTileBounds(2,HazyMaze.atlasSize),
+
+    WALL: HazyMaze.getTileBounds(1,HazyMaze.atlasSize),
+    WALL_ALT: HazyMaze.getTileBounds(3,HazyMaze.atlasSize),
 }
 
 HazyMaze.mesh = null;
@@ -72,12 +74,71 @@ HazyMaze.genMesh = () => {
     HazyMaze.mesh = null;
     HazyMaze.meshPoints = 0;
 
-    for (let y=0; y<HazyMaze.level.height; y++) {
-        for (let x=0; x<HazyMaze.level.width; x++) {
-            const tile = HazyMaze.level.getTile(x,y);
 
+    const width = Number(HazyMaze.level.height);
+    const height = Number(HazyMaze.level.height);
+    const steppedWidth = width + 10;
+    const steppedHeight = height + 10;
+    
+    for (let y=-4; y<5; y++) {
+        for (let x=-4; x<5; x++) {
+            if (x != 0 || y != 0) {
+                const dx = (x * steppedWidth) - 5;
+                const dy = (y * steppedHeight) - 5;
+
+                //Floor
+                HazyMaze.addQuad(json,
+                    dx, -0.51, dy, ...HazyMaze.tiles.FLOOR[0],
+                    dx + steppedWidth, -0.51, dy, ...HazyMaze.tiles.FLOOR[1],
+                    dx, -0.51, dy + steppedHeight, ...HazyMaze.tiles.FLOOR[2],
+                    dx + steppedWidth, -0.51, dy + steppedHeight, ...HazyMaze.tiles.FLOOR[3],
+
+                    0, 1, 0,
+                    1,1,1
+                );
+                
+                //Ceiling
+                HazyMaze.addQuad(json,
+                    dx + steppedWidth, 0.51, dy, ...HazyMaze.tiles.CEILING[0],
+                    dx, 0.51, dy, ...HazyMaze.tiles.CEILING[1],
+                    dx + steppedWidth, 0.51, dy + steppedHeight, ...HazyMaze.tiles.CEILING[2],
+                    dx, 0.51, dy + steppedHeight, ...HazyMaze.tiles.CEILING[3],
+
+                    0, -1, 0,
+                    1,1,1
+                );
+            }
+        }
+    }
+
+    for (let y=-5; y< height + 5; y++) {
+        for (let x=-5; x<width + 5; x++) {
+            const tile = ((y < 0 || y >= HazyMaze.level.height) || (x < 0 || x >= HazyMaze.level.width)) ? -1 : HazyMaze.level.getTile(x,y);
+            if (tile == -1) {
+                //Floor
+                HazyMaze.addQuad(json,
+                    x, -0.5, y, ...HazyMaze.tiles.FLOOR[0],
+                    x + 1, -0.5, y, ...HazyMaze.tiles.FLOOR[1],
+                    x, -0.5, y + 1, ...HazyMaze.tiles.FLOOR[2],
+                    x + 1, -0.5, y + 1, ...HazyMaze.tiles.FLOOR[3],
+
+                    0, 1, 0,
+                    1,1,1
+                );
+                
+                //Ceiling
+                HazyMaze.addQuad(json,
+                    x + 1, 0.5, y, ...HazyMaze.tiles.CEILING[0],
+                    x, 0.5, y, ...HazyMaze.tiles.CEILING[1],
+                    x + 1, 0.5, y + 1, ...HazyMaze.tiles.CEILING[2],
+                    x, 0.5, y + 1, ...HazyMaze.tiles.CEILING[3],
+
+                    0, -1, 0,
+                    1,1,1
+                );
+            }
             //Make sure we aren't an empty version
-            if ((tile & HazyMaze.EMPTY)) {
+            else if ((tile & HazyMaze.EMPTY)) {
                 //Floor
                 HazyMaze.addQuad(json,
                     x, -0.5, y, ...HazyMaze.tiles.FLOOR[0],

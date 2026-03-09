@@ -26,16 +26,18 @@ HazyMaze.initilizeShaders = () => {
             vec3 r_normal = a_normal;
             vec2 r_texcoord = a_texcoord;
 
-            //Yaw
-            r_position.xz = vec2(
-                r_position.z * u_transform[0].x + r_position.x * u_transform[0].y,
-                r_position.z * u_transform[0].y - r_position.x * u_transform[0].x
-            );
             //Pitch
             r_position.yz = vec2(
                 r_position.z * u_transform[1].x + r_position.y * u_transform[1].y,
                 r_position.z * u_transform[1].y - r_position.y * u_transform[1].x
             );
+
+            //Yaw
+            r_position.xz = vec2(
+                r_position.z * u_transform[0].x + r_position.x * u_transform[0].y,
+                r_position.z * u_transform[0].y - r_position.x * u_transform[0].x
+            );
+
             //Roll
             r_position.xy = vec2(
                 r_position.y * u_transform[2].x + r_position.x * u_transform[2].y,
@@ -44,16 +46,18 @@ HazyMaze.initilizeShaders = () => {
             //Move to transform
             r_position += vec3(u_transform[0].z, u_transform[1].z, u_transform[2].z);
 
-            //Yaw
-            r_normal.xz = vec2(
-                r_normal.z * u_transform[0].x + r_normal.x * u_transform[0].y,
-                r_normal.z * u_transform[0].y - r_normal.x * u_transform[0].x
-            );
             //Pitch
             r_normal.yz = vec2(
                 r_normal.z * u_transform[1].x + r_normal.y * u_transform[1].y,
                 r_normal.z * u_transform[1].y - r_normal.y * u_transform[1].x
             );
+            
+            //Yaw
+            r_normal.xz = vec2(
+                r_normal.z * u_transform[0].x + r_normal.x * u_transform[0].y,
+                r_normal.z * u_transform[0].y - r_normal.x * u_transform[0].x
+            );
+
             //Roll
             r_normal.xy = vec2(
                 r_normal.y * u_transform[2].x + r_normal.x * u_transform[2].y,
@@ -71,6 +75,11 @@ HazyMaze.initilizeShaders = () => {
             r_position.xz = vec2(
                 r_position.z * u_cameraRot[0][0] + r_position.x * u_cameraRot[0][1],
                 r_position.z * u_cameraRot[0][1] - r_position.x * u_cameraRot[0][0]
+            );
+
+            r_position.yz = vec2(
+                r_position.z * u_cameraRot[0][2] + r_position.y * u_cameraRot[1][2],
+                r_position.z * u_cameraRot[1][2] - r_position.y * u_cameraRot[0][2]
             );
 
             r_position.xy = vec2(
@@ -135,22 +144,6 @@ HazyMaze.initilizeShaders = () => {
         v_texcoord = a_texcoord;
     }`;
 
-    const fragment = `precision highp float;
-
-    varying vec2 v_texcoord;
-    
-    uniform sampler2D u_color;
-    uniform sampler2D u_position;
-    uniform sampler2D u_normal;
-    uniform vec3 u_ambient;
-
-    uniform mat3 u_lights[64];
-    uniform float u_lightCount;
-
-    void main() {
-        gl_FragColor = texture2D([shader], v_texcoord);
-    }`;
-
     HazyMaze.shaders = {
         postProcess: HazyMaze.daveShade.createShader(
             vertex,
@@ -197,10 +190,53 @@ HazyMaze.initilizeShaders = () => {
             }`
         ),
 
-
         colorOnly: HazyMaze.daveShade.createShader(
             vertex,
-            fragment.replace("[shader]", "u_color")
+            `precision highp float;
+
+            varying vec2 v_texcoord;
+            
+            uniform sampler2D u_color;
+
+            uniform mat3 u_lights[64];
+            uniform float u_lightCount;
+
+            void main() {
+                gl_FragColor = texture2D(u_color, v_texcoord);
+            }`
+        ),
+
+        normalOnly: HazyMaze.daveShade.createShader(
+            vertex,
+            `precision highp float;
+
+            varying vec2 v_texcoord;
+            
+            uniform sampler2D u_normal;
+
+            uniform mat3 u_lights[64];
+            uniform float u_lightCount;
+
+            void main() {
+                gl_FragColor = (texture2D(u_normal, v_texcoord) + 1.0) / 2.0;
+            }`
+        ),
+
+        positionOnly: HazyMaze.daveShade.createShader(
+            vertex,
+            `precision highp float;
+
+            varying vec2 v_texcoord;
+            
+            uniform sampler2D u_position;
+
+            uniform mat3 u_lights[64];
+            uniform float u_lightCount;
+            uniform vec2 u_mapSize;
+
+            void main() {
+                gl_FragColor = texture2D(u_position, v_texcoord) / vec4(u_mapSize.x, 1, u_mapSize.y, 1) + vec4(0, 0.5, 0, 0);
+            }`
         ),
     }
 }
