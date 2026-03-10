@@ -34,7 +34,6 @@
         "---",
         { type: "slider", min: 0, max: 25, step: 0.1, key: "timescale", text: "Timescale", target: HazyMaze},
         "---",
-        "---",
         { type: "vec2", key: "mazeDimensions", text: "New Size", target: HazyMaze },
         { type: "boolean", key: "isNight", text: "Night Mode", target: HazyMaze },
         { type: "int", key: "ratCount", text: "Rat Count", min: 0, max: 25, target: HazyMaze },
@@ -43,13 +42,24 @@
             HazyMaze.generate();
         }},
         "---",
-        "---",
         { type: "boolean", key: "userControlled", text: "Control!", target: HazyMaze},
         "---",
         { type: "button", text: "Upload Texture", onclick: () => {
             filePopup.click();
         }},
         { type: "link", text: "Original Texture", link: `${location.href.replaceAll(/\/$/g, "")}/assets/TILES.png` },
+        "---",
+        { type: "dropdown", target: HazyMaze, key: "view", text: "View", items: [
+            { text: "First-Person", value: "firstPerson" },
+            { text: "Top-Down", value: "topDown" },
+            { text: "Full-Maze", value: "fullView" }
+        ]},
+        { type: "dropdown", target: HazyMaze, key: "displayMode", text: "Display Mode", items: [
+            { text: "Default", value: "postProcess" },
+            { text: "Color", value: "colorOnly" },
+            { text: "Normals", value: "normalOnly" },
+            { text: "Position", value: "positionOnly" },
+        ]},
         "---",
         "---",
         "Hazy Maze created by",

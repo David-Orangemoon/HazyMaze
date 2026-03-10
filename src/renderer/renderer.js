@@ -3,6 +3,8 @@ HazyMaze.daveShade = DaveShade.createInstance(HazyMaze.canvas, { antialias: fals
 HazyMaze.daveShade.cullFace(HazyMaze.daveShade.SIDE.BACK);
 HazyMaze.daveShade.useZBuffer(true);
 
+HazyMaze.displayMode = "postProcess";
+
 HazyMaze.framebuffer = HazyMaze.daveShade.createFramebuffer(640, 480, [
     HazyMaze.daveShade.RENDERBUFFER_TYPE.TEXTURE_RGBA, //Color
     HazyMaze.daveShade.RENDERBUFFER_TYPE.TEXTURE_RGBA_FLOAT, //Position
@@ -22,7 +24,7 @@ HazyMaze.addLightToRender = (light) => {
     HazyMaze.lightQueue[HazyMaze.lights] = light;
 
     //Set uniform
-    HazyMaze.shaders.postProcess.uniforms.u_lights[HazyMaze.lights].value = light;
+    if (HazyMaze.shaders[HazyMaze.displayMode].uniforms.u_lights) HazyMaze.shaders[HazyMaze.displayMode].uniforms.u_lights[HazyMaze.lights].value = light;
 
     HazyMaze.lights++;
 }

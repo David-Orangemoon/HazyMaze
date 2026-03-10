@@ -40,6 +40,5 @@ HazyMaze.floatingShape = class extends HazyMaze.entity {
 
         this.inactive = true;
         player.targetRoll += 180;
-        console.log("TOUHED")
     }
 };

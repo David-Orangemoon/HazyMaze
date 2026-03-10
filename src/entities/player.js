@@ -1,4 +1,6 @@
 HazyMaze.userControlled = false;
+HazyMaze.noclip = false;
+HazyMaze.view = "firstPerson";
 
 HazyMaze.player = class extends HazyMaze.entity {
     init() {
@@ -91,6 +93,8 @@ HazyMaze.player = class extends HazyMaze.entity {
         this.x += x;
         this.y += y;
 
+        if (HazyMaze.noclip) return;
+
         if (tile & HazyMaze.NORTH) {
             this.collideLine({ x: tileX, y: tileY + 1, dx: 1, dy: 0});
         }
@@ -116,9 +120,10 @@ HazyMaze.player = class extends HazyMaze.entity {
         let convertedRoll = this.roll * 0.01745329;
         let converted = [
             Math.sin(convertedAngle), Math.cos(convertedAngle), 0,
-            Math.sin(convertedRoll), Math.cos(convertedRoll), 0
+            Math.sin(convertedRoll), Math.cos(convertedRoll), 1
         ];
 
+        //Simple FPS movement if the user requests it.
         if (HazyMaze.userControlled && this.state != 4) {
             if (HazyMaze.keysDown["a"]) this.direction += 180 * HazyMaze.deltaTime * converted[4];
             if (HazyMaze.keysDown["d"]) this.direction -= 180 * HazyMaze.deltaTime * converted[4];
@@ -211,15 +216,84 @@ HazyMaze.player = class extends HazyMaze.entity {
             }
         }
 
+        //View mode configuration
+        let aspectStretch = 0.75;
+        let cameraPosition = [this.x, Math.cos(convertedRoll) * 0.05, this.y];
+        
+        //Just in-case we need/want to add more.
+        switch (HazyMaze.view) {
+            case "fullView":
+                converted[0] = 0;
+                converted[1] = 1;
+                converted[2] = 1;
+                converted[3] = 0;
+                converted[4] = 1;
+                converted[5] = 0;
+
+                const halfWidth = HazyMaze.level.width / 2;
+                const halfHeight = HazyMaze.level.height / 2;
+
+                cameraPosition = [halfWidth, Math.sqrt(Math.pow(halfWidth, 2) + Math.pow(halfHeight, 2)), halfHeight];
+                
+                aspectStretch = 1;
+                break;
+
+            case "topDown":
+                converted[2] = 1;
+                converted[5] = 0;
+                converted[3] = 0;
+                converted[4] = 1;
+
+                cameraPosition[1] = 3;
+                
+                aspectStretch = 1;
+                break;
+        
+            default:
+                break;
+        }
+        
+        HazyMaze.shader.setUniforms({
+            u_cameraPos: cameraPosition,
+            u_cameraRot: [...converted, (HazyMaze.canvas.height / HazyMaze.canvas.width) / aspectStretch, this.popup, 0],
+        });
+
+        //If not in first person do a billboard thingimajig.
+        if (HazyMaze.view != "firstPerson") {
+            const cameraRotation = HazyMaze.shader.uniforms.u_cameraRot.value;
+
+            //We need to draw both sides for flipping.
+            HazyMaze.shader.setUniforms({
+                u_texture: HazyMaze.texture.texture,
+                u_uvTransform: [6/HazyMaze.atlasSize,0, 1/HazyMaze.atlasSize,1],
+                u_transform: [
+                    -Math.sin(convertedAngle), Math.cos(convertedAngle), this.x, 
+                    -cameraRotation[2], cameraRotation[5], 0,
+                    -Math.sin(convertedRoll), Math.cos(convertedRoll), this.y
+                ],
+                u_angleShade: [
+                    0.625,-0.25,0.125,1.0
+                ]
+            });
+
+            HazyMaze.shader.setBuffers(HazyMaze.billboard);
+            HazyMaze.shader.drawFromBuffers(6);
+
+            HazyMaze.shader.setUniforms({
+                u_transform: [
+                    -Math.sin(convertedAngle), Math.cos(convertedAngle), this.x, 
+                    -cameraRotation[2], cameraRotation[5], 0.5,
+                    -Math.sin(convertedRoll), -Math.cos(convertedRoll), this.y
+                ],
+            });
+            HazyMaze.shader.drawFromBuffers(6);
+        }
+
         const entityCount = HazyMaze.level.entities.length;
         for (let entID = 0; entID < entityCount; entID++) {
             const entity = HazyMaze.level.entities[entID];
             if (entity.getCurrentTileID() == this.getCurrentTileID()) entity.touchedPlayer(this);
         }
 
-        HazyMaze.shader.setUniforms({
-            u_cameraPos: [this.x, Math.cos(convertedRoll) * 0.05, this.y],
-            u_cameraRot: [...converted, (HazyMaze.canvas.height / HazyMaze.canvas.width) / 0.75, this.popup, 0],
-        });
     }
 };

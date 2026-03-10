@@ -3,8 +3,6 @@ HazyMaze.deltaTime = 0.016;
 HazyMaze.timescale = 1;
 
 HazyMaze.update = () => {
-    
-    
     HazyMaze.daveShade.viewport(0, 0, HazyMaze.canvas.width, HazyMaze.canvas.height);
 
     //Render maze
@@ -18,7 +16,7 @@ HazyMaze.update = () => {
         HazyMaze.lights = 0;
         const entityCount = HazyMaze.level.entities.length;
         for (let entID = 0; entID < entityCount; entID++) {
-            HazyMaze.level.entities[entID].update();
+            if (HazyMaze.level.entities[entID]) HazyMaze.level.entities[entID].update();
         }
 
         //Draw maze
@@ -43,14 +41,15 @@ HazyMaze.update = () => {
     HazyMaze.daveShade.renderToCanvas();
     HazyMaze.daveShade.clear(HazyMaze.daveShade.GL.DEPTH_BUFFER_BIT);
     HazyMaze.daveShade.cullFace(HazyMaze.daveShade.SIDE.NEITHER);
-    HazyMaze.shaders.postProcess.setUniforms({
+    HazyMaze.shaders[HazyMaze.displayMode].setUniforms({
         u_lightCount: HazyMaze.lights,
         u_color: HazyMaze.framebuffer.ATTACHMENTS[0].texture,
         u_position: HazyMaze.framebuffer.ATTACHMENTS[1].texture,
         u_normal: HazyMaze.framebuffer.ATTACHMENTS[2].texture,
+        u_mapSize: [ HazyMaze.level.width, HazyMaze.level.height ]
     });
-    HazyMaze.shaders.postProcess.setBuffers(HazyMaze.daveShade.TEXTURE_READING_QUAD);
-    HazyMaze.shaders.postProcess.drawFromBuffers(6);
+    HazyMaze.shaders[HazyMaze.displayMode].setBuffers(HazyMaze.daveShade.TEXTURE_READING_QUAD);
+    HazyMaze.shaders[HazyMaze.displayMode].drawFromBuffers(6);
 
     requestAnimationFrame(HazyMaze.update);
 

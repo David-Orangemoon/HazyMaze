@@ -85,10 +85,10 @@ HazyMaze.rat = class extends HazyMaze.entity {
 
         HazyMaze.shader.setUniforms({
             u_texture: HazyMaze.texture.texture,
-            u_uvTransform: [4/6,0, 1/6,1],
+            u_uvTransform: [4/HazyMaze.atlasSize,0, 1/HazyMaze.atlasSize,1],
             u_transform: [
                 -cameraRotation[0], cameraRotation[1], this.x, 
-                0, 1, Math.abs(Math.sin(this.interp * Math.PI * 2) * 0.25),
+                -cameraRotation[2], cameraRotation[5], Math.abs(Math.sin(this.interp * Math.PI * 2) * 0.25),
                 0, 1, this.y
             ],
             u_angleShade: [
